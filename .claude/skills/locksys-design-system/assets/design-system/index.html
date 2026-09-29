@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LockSys HR Mobile Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS (mobile) ============ */
+:root{
+  --navy:#071F3D;--navy-2:#0C2B53;--navy-3:#123A6B;
+  --blue:#126BFF;--blue-bright:#168BFF;--blue-pressed:#0A5CE6;--blue-light:#EAF4FF;--blue-50:#F5FAFF;
+  --white:#fff;--text:#071F3D;--muted:#536477;--line:#DCE7F3;--line-strong:#BFD3EA;
+  --on-navy:#E8F1FF;--on-navy-muted:#9DB3CF;
+  --danger:#C62828;--danger-bg:#FDECEC;--success:#1F7A4D;--success-bg:#E8F6EE;--warning:#B26A00;--warning-bg:#FFF4E0;
+  --lean:15.5deg;--lean-grad:105.5deg;
+  --font:"IBM Plex Sans Arabic",system-ui,"Segoe UI",Tahoma,sans-serif;
+  /* type scale — mobile */
+  --fs-h1:1.5rem;--fs-h2:1.25rem;--fs-h3:1.0625rem;--fs-body:.9375rem;--fs-sm:.8125rem;--fs-xs:.75rem;
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;
+  --gutter:16px;--touch:48px;--appbar:56px;--tabbar:64px;
+  --r-xs:2px;--r-btn:8px;--r-sm:8px;--r-md:12px;--r-lg:16px;
+  --sh-1:0 1px 2px rgba(7,31,61,.06);--sh-2:0 10px 24px -14px rgba(7,31,61,.25);--sh-3:0 -12px 40px -12px rgba(7,31,61,.35);
+  --d-fast:150ms;--d-ui:300ms;--d-page:320ms;--d-reveal:500ms;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --pat-line:rgba(18,107,255,.09);--pat-gap:40px;
+  --l-tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28' fill='none' stroke='%23126BFF' stroke-width='1.6'%3E%3Cpath d='M12 1 5 26H23'/%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body,h1,h2,h3,h4,p,ul{margin:0}ul{padding:0;list-style:none}
+input,button,select,textarea{font:inherit;color:inherit}button{cursor:pointer;background:none;border:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);font-size:var(--fs-body);line-height:1.7;color:var(--text);background:#F3F7FC;-webkit-font-smoothing:antialiased}
+h1,h2,h3{line-height:1.35;font-weight:700;color:var(--navy)}
+.i{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;--ic-fill:rgba(18,107,255,.16)}
+.pattern{background-image:repeating-linear-gradient(var(--lean-grad),transparent 0 var(--pat-gap),var(--pat-line) var(--pat-gap) calc(var(--pat-gap) + 1px))}
+.mono{font-family:ui-monospace,Consolas,monospace;direction:ltr;unicode-bidi:isolate}
+
+/* ============ MOBILE COMPONENTS ============ */
+/* Buttons — full width on mobile, 48px touch, cut corner */
+.btn{--bg:var(--blue);--fg:#fff;--ic-fill:rgba(255,255,255,.3);border-radius:var(--r-btn);position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:var(--touch);padding-inline:22px;font-weight:600;font-size:.95rem;color:var(--fg);transition:transform var(--d-fast) var(--ease-out)}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--bg);border-radius:inherit;transition:background-color var(--d-fast)}
+.btn .i{width:18px;height:18px}
+.btn:active{transform:scale(.98)}.btn:active::before{background:var(--blue-pressed)}
+.btn--navy{--bg:var(--navy)}.btn--navy:active::before{background:var(--navy-3)}
+.btn--danger{--bg:var(--danger)}
+.btn--ghost{--bg:transparent;--fg:var(--navy);--ic-fill:rgba(18,107,255,.16)}
+.btn--ghost::before{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.btn--ghost:active::before{background:var(--blue-50)}
+.btn--sm{min-height:40px;width:auto;padding-inline:18px;font-size:.85rem}
+.btn--lg{min-height:56px;font-size:1rem}
+.btn--inline{width:auto}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn.is-loading{pointer-events:none}.btn.is-loading .i{display:none}
+.btn.is-loading::after{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite}
+.btn--ghost.is-loading::after{border-color:var(--line-strong);border-top-color:var(--blue)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.icon-btn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:var(--r-btn);color:var(--navy);transition:background var(--d-fast)}
+.icon-btn:active{background:var(--blue-light)}
+.text-link{font-weight:600;color:var(--blue);font-size:var(--fs-sm)}
+.fab{position:absolute;inset-inline-end:16px;bottom:calc(var(--tabbar) + 16px);width:56px;height:56px;display:grid;place-items:center;color:#fff;background:var(--blue);border-radius:16px;--ic-fill:rgba(255,255,255,.3);box-shadow:var(--sh-2);transition:transform var(--d-fast)}
+.fab:active{transform:scale(.94)}
+
+/* Inputs */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:var(--fs-sm);font-weight:600;color:var(--navy)}.field label em{color:var(--danger);font-style:normal}
+.input{width:100%;min-height:var(--touch);padding:10px 14px;background:#fff;border:1px solid var(--line-strong);border-radius:var(--r-sm);font-size:1rem;transition:border-color var(--d-fast),box-shadow var(--d-fast)}
+.input::placeholder{color:#8fa1b6}
+.input:focus{outline:0;border-color:var(--blue);box-shadow:0 0 0 3px rgba(18,107,255,.15)}
+.field.is-error .input{border-color:var(--danger);box-shadow:0 0 0 3px rgba(198,40,40,.1)}
+.field__hint{font-size:var(--fs-xs);color:var(--muted)}
+.field__error{font-size:var(--fs-xs);color:var(--danger);display:none}.field.is-error .field__error{display:block}
+textarea.input{min-height:96px;resize:none}
+.input-icon{position:relative}.input-icon .i{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:var(--muted);width:20px;height:20px}
+.input-icon .input{padding-inline-start:44px}
+.check{display:flex;align-items:center;gap:12px;min-height:44px;font-size:var(--fs-body)}
+.check input{appearance:none;width:22px;height:22px;border:1.5px solid var(--line-strong);border-radius:var(--r-xs);display:grid;place-items:center;background:#fff;transition:all var(--d-fast)}
+.check input:checked{background:var(--blue);border-color:var(--blue)}
+.check input:checked::after{content:"";width:11px;height:6px;border:2px solid #fff;border-top:0;border-inline-end:0;transform:rotate(-45deg) translateY(-1px)}
+.switch{position:relative;width:48px;height:28px;background:var(--line-strong);border-radius:99px;transition:background var(--d-ui);flex:none}
+.switch::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform var(--d-ui) var(--ease-out);box-shadow:var(--sh-1)}
+.switch.is-on{background:var(--blue)}.switch.is-on::after{transform:translateX(-20px)}
+
+/* Chips / Badges / Segmented */
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:36px;padding:0 16px;border:1px solid var(--line-strong);font-size:var(--fs-sm);font-weight:500;color:var(--navy);display:inline-flex;align-items:center;border-radius:var(--r-btn);transition:all var(--d-fast)}
+.chip.is-active{background:var(--navy);border-color:var(--navy);color:#fff}
+.badge{--c:var(--blue);--bg:var(--blue-light);position:relative;isolation:isolate;display:inline-flex;align-items:center;gap:7px;padding:3px 12px 3px 12px;font-size:var(--fs-xs);font-weight:600;line-height:1.5;color:var(--c);white-space:nowrap}
+.badge::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--bg);border-radius:6px}
+.badge::before{content:"";width:3px;height:12px;background:var(--c);transform:skewX(calc(var(--lean) * -1));flex:none}
+.badge--success{--c:var(--success);--bg:var(--success-bg)}.badge--danger{--c:var(--danger);--bg:var(--danger-bg)}.badge--warning{--c:var(--warning);--bg:var(--warning-bg)}.badge--muted{--c:var(--muted);--bg:#EEF2F7}
+.badge--solid{color:#fff}.badge--solid::before{background:#fff}.badge--solid::after{background:var(--c)}
+.seg{display:flex;background:var(--blue-50);border:1px solid var(--line);padding:3px;border-radius:var(--r-sm)}
+.seg button{flex:1;min-height:38px;font-size:var(--fs-sm);font-weight:600;color:var(--muted);border-radius:4px;transition:all var(--d-ui) var(--ease-out)}
+.seg button.is-active{background:#fff;color:var(--blue);box-shadow:var(--sh-1)}
+
+/* Cards */
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;display:flex;flex-direction:column;gap:var(--s-2);transition:transform var(--d-fast),border-color var(--d-fast)}
+.card::before{content:"";position:absolute;inset-block-start:14px;inset-inline-end:14px;width:12px;height:15px;background:var(--l-tick) no-repeat center/contain;opacity:.3}
+.card.tappable:active{transform:scale(.985);border-color:var(--line-strong)}
+.card--navy{background:var(--navy);border-color:var(--navy);color:var(--on-navy);overflow:hidden}
+.card--navy .pattern{position:absolute;inset:0;--pat-line:rgba(22,139,255,.16);pointer-events:none}.card--navy>*{position:relative}
+.card--navy::before{display:none}
+.card__title{font-size:var(--fs-h3);font-weight:600;color:var(--navy)}.card--navy .card__title{color:#fff}
+.card p{color:var(--muted);font-size:var(--fs-sm)}.card--navy p{color:var(--on-navy-muted)}
+.stat{font-size:1.75rem;font-weight:700;line-height:1.2;color:var(--navy)}.stat small{display:block;font-size:var(--fs-xs);font-weight:500;color:var(--muted)}
+.trend{font-size:var(--fs-xs);font-weight:600;color:var(--success)}.trend.down{color:var(--danger)}
+.bar{height:6px;background:var(--blue-light);position:relative;overflow:hidden}
+.bar i{position:absolute;inset-block:0;inset-inline-start:0;width:var(--v);background:var(--blue);transform-origin:right;animation:fill 900ms var(--ease-out) both}
+@keyframes fill{from{transform:scaleX(0)}}
+
+/* List tile */
+.list{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.tile{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 16px;border-bottom:1px solid var(--line);transition:background var(--d-fast);width:100%;text-align:start}
+.tile:last-child{border-bottom:0}.tile:active{background:var(--blue-50)}
+.tile__icon{width:40px;height:40px;display:grid;place-items:center;background:var(--blue-50);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--blue);flex:none;--ic-fill:rgba(18,107,255,.2)}
+.tile__icon .i{width:20px;height:20px}
+.tile__body{flex:1;min-width:0}.tile__body b{display:block;font-weight:600;line-height:1.4;font-size:var(--fs-body)}.tile__body small{color:var(--muted);font-size:var(--fs-xs);display:block;line-height:1.4}
+.tile .chev{width:18px;height:18px;color:var(--line-strong);transform:scaleX(-1)}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--blue-light);color:var(--blue);display:inline-grid;place-items:center;font-weight:700;flex:none}
+.avatar--lg{width:72px;height:72px;font-size:1.4rem}
+
+/* Alerts / Snackbar / Sheet / Dialog */
+.alert{--c:var(--blue);--bg:var(--blue-50);position:relative;display:flex;align-items:flex-start;gap:14px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--sh-2);font-size:var(--fs-sm);color:var(--muted);line-height:1.6;overflow:hidden}
+.alert::after{content:"";position:absolute;inset-inline:0;bottom:0;height:2px;background:var(--c);opacity:.9}
+.alert>.i{width:40px;height:40px;padding:10px;background:var(--c);color:#fff;border-radius:var(--r-btn);--ic-fill:rgba(255,255,255,.3);flex:none;stroke-width:2}
+.alert>div{flex:1;min-width:0;padding-top:1px}
+.alert b{display:block;margin-bottom:2px;font-size:var(--fs-body);font-weight:600;color:var(--navy)}
+.alert--success{--c:var(--success)}.alert--warning{--c:var(--warning)}.alert--danger{--c:var(--danger)}
+.snack{background:var(--navy);color:#fff;padding:14px 16px;border-radius:var(--r-sm);display:flex;align-items:center;gap:10px;font-size:var(--fs-sm);box-shadow:var(--sh-2)}
+.snack a{margin-inline-start:auto;color:var(--blue-bright);font-weight:600}
+.scrim{position:absolute;inset:0;background:rgba(7,31,61,.5);opacity:0;pointer-events:none;transition:opacity var(--d-ui);z-index:20}
+.scrim.open{opacity:1;pointer-events:auto}
+.sheet{position:absolute;inset-inline:0;bottom:0;background:#fff;border-radius:var(--r-lg) var(--r-lg) 0 0;padding:12px 16px 24px;transform:translateY(105%);transition:transform var(--d-page) var(--ease-out);z-index:21;box-shadow:var(--sh-3)}
+.sheet.open{transform:none}
+.sheet::before{content:"";display:block;width:40px;height:4px;background:var(--line-strong);border-radius:4px;margin:0 auto 16px}
+.sheet h3{margin-bottom:12px}
+.dialog{position:absolute;inset-inline:24px;top:50%;background:#fff;border-radius:var(--r-md);padding:22px;z-index:22;transform:translateY(-50%) scale(.94);opacity:0;pointer-events:none;transition:all var(--d-ui) var(--ease-out)}
+.dialog.open{transform:translateY(-50%);opacity:1;pointer-events:auto}
+.dialog::before{content:"";position:absolute;inset-inline:0;top:0;height:3px;background:var(--blue);border-radius:var(--r-md) var(--r-md) 0 0}
+.dialog p{color:var(--muted);font-size:var(--fs-sm);margin:6px 0 18px}
+.dialog .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.skel{background:linear-gradient(90deg,#EEF3F9 25%,#F7FAFD 50%,#EEF3F9 75%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;border-radius:6px}
+@keyframes shimmer{to{background-position:-200% 0}}
+.sk-wrap{display:none}
+.pg.is-loading .sk-wrap{display:block}
+.pg.is-loading .body>:not(.sk-wrap){display:none}
+.empty{text-align:center;padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.empty .art{width:88px;height:88px;border:1px solid var(--line);background:var(--blue-50);display:grid;place-items:center;color:var(--blue);margin-bottom:8px;position:relative;overflow:hidden}
+.empty .art .pattern{position:absolute;inset:0}.empty .art .i{width:36px;height:36px;position:relative}
+.empty p{color:var(--muted);font-size:var(--fs-sm);max-width:26ch}
+.pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,122,77,.45)}70%,100%{box-shadow:0 0 0 8px rgba(31,122,77,0)}}
+
+/* ---- App shell ---- */
+.phone{width:390px;height:800px;background:#fff;border:10px solid var(--navy);border-radius:46px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px rgba(7,31,61,.5);flex:none;isolation:isolate}
+.status{height:32px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;font-size:.72rem;font-weight:600;background:#fff;flex:none;direction:ltr}
+.status.on-dark{background:var(--navy);color:#fff}
+.appbar{height:var(--appbar);display:flex;align-items:center;gap:4px;padding-inline:8px 12px;background:#fff;border-bottom:1px solid var(--line);flex:none}
+.appbar h1{font-size:1.0625rem;flex:1;font-weight:600;padding-inline:4px}
+.appbar .brand{display:flex;align-items:center;gap:10px;flex:1;padding-inline-start:8px}
+.appbar .brand svg{width:22px;height:30px;color:var(--blue)}.appbar .brand b{font-size:1.05rem;line-height:1}.appbar .brand small{display:block;font-size:.6rem;letter-spacing:.14em;color:var(--muted);margin-top:2px}
+.body{flex:1;overflow-y:auto;position:relative;scrollbar-width:none;background:#fff}.body::-webkit-scrollbar{display:none}
+.pad{padding:var(--gutter);display:flex;flex-direction:column;gap:var(--s-4)}
+.pg{display:none;flex-direction:column;flex:1;min-height:0}.pg.on{display:flex;animation:pgIn var(--d-page) var(--ease-out)}
+@keyframes pgIn{from{opacity:0;transform:translateX(-24px)}}
+.tabbar{height:var(--tabbar);display:grid;grid-template-columns:repeat(4,1fr);background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);flex:none;position:relative;z-index:5}
+.tabbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.68rem;font-weight:500;color:var(--muted);position:relative;transition:color var(--d-fast)}
+.tabbar button .i{width:23px;height:23px;transition:transform var(--d-ui) var(--ease-out)}
+.tabbar button.is-active{color:var(--blue);font-weight:600}.tabbar button.is-active .i{transform:translateY(-2px)}
+.tabbar button.is-active::before{content:"";position:absolute;top:0;width:28px;height:2px;background:var(--blue);transform:skewX(calc(var(--lean) * -1));animation:grow var(--d-ui) var(--ease-out)}
+@keyframes grow{from{transform:scaleX(0) skewX(calc(var(--lean) * -1))}}
+.badge-dot{position:absolute;top:8px;inset-inline-end:calc(50% - 18px);min-width:16px;height:16px;padding:0 4px;background:var(--danger);color:#fff;border-radius:99px;font-size:.6rem;display:grid;place-items:center;font-weight:700}
+.homebar{height:20px;display:grid;place-items:center;background:#fff;flex:none}.homebar::after{content:"";width:120px;height:4px;border-radius:4px;background:var(--navy);opacity:.85}
+
+/* Screen header (title pattern for mobile) */
+.hd{padding:20px var(--gutter) 4px}
+.hd .kicker{display:flex;align-items:center;gap:8px;color:var(--blue);font-size:var(--fs-sm);font-weight:500}
+.hd .kicker::before{content:"";width:12px;height:15px;background:var(--l-tick) no-repeat center/contain}
+.hd h1{font-size:var(--fs-h1);margin-top:2px}.hd p{color:var(--muted);font-size:var(--fs-sm);margin-top:2px}
+.hd::after{content:"";display:block;width:56px;height:2px;background:var(--blue);margin-top:14px;transform-origin:right;animation:draw .9s var(--ease-out) both}
+@keyframes draw{from{transform:scaleX(0)}}
+.section-title{display:flex;justify-content:space-between;align-items:baseline}.section-title h3{font-size:var(--fs-h3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stagger>*{animation:rise var(--d-reveal) var(--ease-out) both}
+.stagger>*:nth-child(2){animation-delay:60ms}.stagger>*:nth-child(3){animation-delay:120ms}.stagger>*:nth-child(4){animation-delay:180ms}.stagger>*:nth-child(5){animation-delay:240ms}.stagger>*:nth-child(6){animation-delay:300ms}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.clock-card{background:var(--navy);color:#fff;padding:20px;position:relative;overflow:hidden;border-radius:var(--r-sm)}
+.clock-card .pattern{position:absolute;inset:0;--pat-line:rgba(22,139,255,.16)}.clock-card>*{position:relative}
+.clock-time{font-size:2.6rem;font-weight:700;line-height:1.1;direction:ltr;text-align:start;letter-spacing:-.01em}
+.login-art{background:linear-gradient(180deg,var(--blue-50),#fff);position:relative;overflow:hidden;padding:12px 20px 20px;flex:none;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.login-art .pattern{position:absolute;inset:0;-webkit-mask-image:linear-gradient(to left,transparent,#000 60%,transparent);mask-image:linear-gradient(to left,transparent,#000 60%,transparent)}.login-art>*{position:relative}.login-art>.pattern{position:absolute}
+.login-art h2{font-size:1.75rem;margin:0;direction:ltr}
+.login-logo{width:78px;height:104px;margin-top:4px}
+.login-art p{color:var(--muted);font-size:var(--fs-sm);max-width:30ch;margin:0}
+
+/* icons & account additions */
+.card--navy,.clock-card,.side{--ic-fill:rgba(22,139,255,.4)}
+.snack{--ic-fill:rgba(255,255,255,.25)}
+.tabbar button.is-active{--ic-fill:rgba(18,107,255,.3)}
+.back-btn{width:40px;height:40px;border:1px solid var(--line);background:#fff;box-shadow:var(--sh-1);margin-inline-end:6px;margin-inline-start:4px}
+.back-btn:active{background:var(--blue-50);transform:scale(.95)}
+.empty .art{border-radius:var(--r-md)}
+.group-title{font-size:var(--fs-xs);font-weight:600;color:var(--muted);letter-spacing:.03em;margin-bottom:-6px;padding-top:4px}
+.profile{gap:14px;padding:18px}
+.profile .who{display:flex;align-items:center;gap:14px}
+.profile .avatar{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:var(--r-md)}
+.profile h2{color:#fff;font-size:1.15rem}.profile small{color:var(--on-navy-muted);font-size:var(--fs-xs)}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pstats div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-sm);padding:10px 6px;text-align:center;line-height:1.3}
+.pstats b{display:block;color:#fff;font-size:1.15rem}.pstats span{font-size:.68rem;color:var(--on-navy-muted)}
+.tile__val{font-size:var(--fs-sm);color:var(--muted)}
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
+.ig{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 6px 10px;text-align:center;font-size:.72rem;color:var(--muted);transition:all var(--d-ui) var(--ease-out);cursor:default}
+.ig .i{width:28px;height:28px;color:var(--navy);margin-bottom:8px;transition:all var(--d-ui) var(--ease-out)}
+.ig:hover{border-color:var(--blue);transform:translateY(-2px)}.ig:hover .i{color:var(--blue);--ic-fill:rgba(18,107,255,.3)}
+.ig code{display:block;font-size:.65rem;color:var(--blue);direction:ltr;margin-top:2px}
+.ctx{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:var(--r-btn)}
+
+/* welcome: splash + onboarding */
+.text-link{cursor:pointer}
+.hd.plain::after{display:none}
+.cc-ok{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);color:var(--success);display:none}.cc-ok .i{position:static;transform:none;color:var(--success)}
+.lang-toggle{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line-strong);border-radius:8px;background:#fff;font-size:var(--fs-sm);font-weight:600;color:var(--navy);white-space:nowrap}.lang-toggle .i{width:18px;height:18px}
+.input-icon .eye{position:absolute;inset-inline-end:2px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:grid;place-items:center;color:var(--muted)}.input-icon .eye .i{position:static;transform:none}
+.splash{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:#fff;color:var(--navy);overflow:hidden}
+.splash .pattern{position:absolute;inset:0;--pat-line:rgba(18,107,255,.09);-webkit-mask-image:radial-gradient(circle at 50% 42%,#000,transparent 72%);mask-image:radial-gradient(circle at 50% 42%,#000,transparent 72%)}
+.splash-logo,.splash-name{position:relative}
+.splash-logo{width:90px;height:120px;opacity:0;transform:scale(.88) translateY(10px)}
+.pg.on .splash-logo{animation:logoIn .7s var(--ease-out) .1s forwards}
+@keyframes logoIn{to{opacity:1;transform:none}}
+@keyframes drawL{to{stroke-dashoffset:0}}
+.splash-name{text-align:center;opacity:0;transform:translateY(10px)}
+.pg.on .splash-name{animation:splashUp .6s var(--ease-out) .9s forwards}
+@keyframes splashUp{to{opacity:1;transform:none}}
+.splash-name b{display:block;font-size:2rem;line-height:1.1;letter-spacing:-.01em}
+.splash-name small{display:block;margin-top:8px;font-size:.68rem;letter-spacing:0;color:var(--muted);font-weight:500}
+.splash-bar{position:absolute;bottom:76px;width:120px;height:3px;background:var(--blue-light);overflow:hidden;border-radius:3px}
+.splash-bar i{display:block;height:100%;background:var(--blue);transform:scaleX(0);transform-origin:right}
+.pg.on .splash-bar i{animation:barFill 2.2s var(--ease-out) .3s forwards}
+@keyframes barFill{to{transform:none}}
+.splash-ver{position:absolute;bottom:34px;font-size:.7rem;color:var(--muted)}
+.homebar.dark{background:var(--navy)}.homebar.dark::after{background:#fff}
+.onb{flex:1;display:flex;flex-direction:column;padding:6px 20px 8px;min-height:0}
+.onb-top{display:flex;justify-content:space-between;align-items:center;height:56px}
+.onb-logo{width:24px;height:32px}.onb-end{display:flex;align-items:center;gap:12px}
+.onb-top .mono{font-size:var(--fs-sm);color:var(--muted);font-weight:600}
+.onb-art{flex:1;position:relative;margin:6px 0 22px;border-radius:var(--r-md);background:linear-gradient(180deg,var(--blue-50),#fff);border:1px solid var(--line);overflow:hidden;min-height:0}
+.onb-art .pattern{position:absolute;inset:0;-webkit-mask-image:linear-gradient(to left,transparent,#000 60%,transparent);mask-image:linear-gradient(to left,transparent,#000 60%,transparent)}
+.art-l{position:absolute;inset-inline-end:-12%;bottom:-8%;width:78%;opacity:.18;pointer-events:none}
+.art-l svg{width:100%;fill:none;stroke:var(--blue);stroke-width:.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90}
+.pg.on .art-l svg{animation:drawL 1.8s var(--ease-out) .1s forwards}
+.onb-txt{animation:rise .6s var(--ease-out) .1s both}
+.onb-txt h1{font-size:1.6rem;line-height:1.35}
+.onb-txt p{color:var(--muted);margin-top:8px;font-size:.95rem;min-height:3.4em}
+.onb-foot{display:grid;gap:18px;padding-top:18px}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:4px;background:var(--line-strong);transition:width var(--d-ui) var(--ease-out),background var(--d-ui)}
+.dots i.on{width:28px;background:var(--blue)}
+.fl{position:absolute;z-index:2;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;box-shadow:var(--sh-2);animation:floaty 5s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.fl b{display:block;font-size:.8rem;line-height:1.3}.fl small{display:block;font-size:.68rem;color:var(--muted);line-height:1.3}
+.fl .tile__icon{width:34px;height:34px}
+.fl-a{top:12%;inset-inline-start:7%}.fl-b{bottom:12%;inset-inline-end:7%;--dl:-2.5s}
+@keyframes floaty{50%{transform:translateY(-6px)}}
+.art-hub{position:absolute;inset:0;margin:auto;width:112px;height:112px;display:grid;place-items:center}
+.hub-tile{position:relative;width:112px;height:112px;background:var(--navy);border-radius:24px;display:grid;place-items:center;color:#fff;--ic-fill:rgba(22,139,255,.45);box-shadow:var(--sh-2)}
+.hub-tile .i{width:56px;height:56px;stroke-width:1.6}
+.ring{position:absolute;inset:0;border:2px solid var(--blue);border-radius:24px;opacity:0;animation:ripple 2.6s var(--ease-out) infinite}
+.ring.r2{animation-delay:1.3s}
+@keyframes ripple{from{opacity:.5;transform:scale(.9)}to{opacity:0;transform:scale(1.6)}}
+.art-card{position:absolute;inset:0;margin:auto;width:min(236px,72%);height:fit-content;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:16px;box-shadow:var(--sh-2);display:grid;gap:14px}
+.art-card.top{inset:auto;left:0;right:0;top:15%;margin-inline:auto}
+.art-card.bot{inset:auto;left:0;right:0;bottom:13%;margin-inline:auto;width:min(206px,64%);padding:12px 16px;gap:0}
+.art-card.navy{background:var(--navy);border-color:var(--navy);color:#fff;gap:8px}
+.art-card.navy small{color:var(--on-navy-muted);font-size:.72rem}
+.art-card .big{font-size:2rem;font-weight:700;line-height:1.1}
+.ac-head{display:flex;align-items:center;gap:10px}.ac-head b{display:block;font-size:.85rem;line-height:1.3}.ac-head small{color:var(--muted);font-size:.7rem}
+.ac-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.ac-cal i{height:24px;border-radius:6px;background:var(--blue-light)}.ac-cal i.on{background:var(--blue)}
+.ac-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--line)}.ac-row:last-child{border:0}.ac-row b{color:var(--navy)}
+
+/* ============ DOC LAYOUT ============ */
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.top nav{display:flex;gap:2px;overflow-x:auto}.top nav a{padding:8px 14px;font-size:.88rem;font-weight:500;border-radius:var(--r-sm);white-space:nowrap}.top nav a:hover{background:var(--blue-50)}
+.doc-hero{padding:48px 0 24px;position:relative;overflow:hidden}
+.doc-hero h1{font-size:clamp(1.8rem,1.2rem + 2vw,2.6rem);max-width:20ch}.doc-hero h1 span{color:var(--blue)}
+.doc-hero p{color:var(--muted);max-width:60ch;margin-top:12px;font-size:1.05rem}
+.tagx{display:inline-block;padding:4px 14px;border:1px solid var(--line-strong);font-size:.78rem;font-weight:500;color:var(--navy-3);background:#fff}
+.dsec{padding:48px 0;border-top:1px solid var(--line)}
+.dsec .idx{color:var(--blue);font-weight:500;font-size:.85rem;display:flex;gap:8px;align-items:center}.dsec .idx::before{content:"";width:12px;height:15px;background:var(--l-tick) no-repeat center/contain}
+.dsec h2{font-size:1.6rem;margin:4px 0 8px}.dsec>p.lead{color:var(--muted);max-width:64ch;margin-bottom:28px}
+.sub{font-size:.85rem;font-weight:600;color:var(--navy-3);margin:26px 0 12px}
+.swgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.sw{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;cursor:pointer;transition:transform var(--d-ui) var(--ease-out)}.sw:hover{transform:translateY(-3px)}
+.sw .c{height:72px;border-bottom:1px solid var(--line)}.sw div:last-child{padding:10px 12px}.sw b{display:block;font-size:.88rem}.sw code{font-size:.75rem;color:var(--muted);direction:ltr;display:block;text-align:start}.sw small{font-size:.72rem;color:var(--muted)}
+.spec{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 18px}
+.spec .r{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}.spec .r:last-child{border:0}
+.spec code{font-size:.75rem;color:var(--muted);direction:ltr;flex:none}
+.panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line-strong);border-radius:var(--r-md);padding:18px;display:flex;flex-direction:column;gap:14px;max-width:390px;width:100%}
+.panel>h4{font-size:.78rem;letter-spacing:.06em;color:var(--muted);font-weight:600;margin:0}
+.rel{position:relative;height:300px;background:#F3F7FC;border:1px solid var(--line);overflow:hidden;border-radius:var(--r-sm)}
+.gallery{display:flex;gap:32px;overflow-x:auto;padding:20px 4px 40px;align-items:flex-start;scroll-snap-type:x proximity}
+.gallery>div{scroll-snap-align:start;flex:none}.gallery .cap{text-align:center;margin-top:14px;font-weight:600;font-size:.9rem}.gallery .cap small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+.rules li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;font-size:.92rem}.rules li::before{content:"";width:12px;height:15px;margin-top:6px;background:var(--l-tick) no-repeat center/contain;flex:none}
+.mo{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.mo div{background:#fff;border:1px solid var(--line);padding:16px;border-radius:var(--r-sm);font-size:.85rem;color:var(--muted)}.mo b{display:block;color:var(--navy);font-size:.95rem}
+.dbox{background:#fff;border:1px solid var(--line);padding:20px;border-radius:var(--r-sm);display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+.dbox .mb{width:56px;height:56px;background:var(--blue);border-radius:8px}
+.dbox>div{text-align:center;font-size:.78rem;color:var(--muted)}
+.rise.go{animation:rise var(--d-reveal) var(--ease-out)}.slide.go{animation:pgIn var(--d-page) var(--ease-out)}.scale.go{animation:pop var(--d-ui) var(--ease-out)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}}
+.toastx{position:fixed;bottom:20px;inset-inline-start:20px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:var(--r-sm);font-size:.85rem;z-index:300;animation:rise var(--d-ui) var(--ease-out)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+<symbol id="arrow" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+<symbol id="back" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 8l4 4-4 4M20 12H9"/></symbol>
+<symbol id="home" viewBox="0 0 24 24"><path d="M5 10l7-6 7 6v10H5z" style="fill:var(--ic-fill);stroke:none"/><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-5h4v5"/></symbol>
+<symbol id="users" viewBox="0 0 24 24"><path d="M9 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" style="fill:var(--ic-fill);stroke:none"/><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14c2.2.6 3.5 2.4 3.5 6"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><path d="M12 4a4 4 0 100 8 4 4 0 000-8z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
+<symbol id="cal" viewBox="0 0 24 24"><path d="M4.5 6h15v4h-15z" style="fill:var(--ic-fill);stroke:none"/><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 100 17 8.5 8.5 0 000-17z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="money" viewBox="0 0 24 24"><path d="M12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z" style="fill:var(--ic-fill);stroke:none"/><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6.5 12h.01M17.5 12h.01"/></symbol>
+<symbol id="file" viewBox="0 0 24 24"><path d="M14 3v4h4z" style="fill:var(--ic-fill);stroke:none"/><path d="M14 3H7a1 1 0 00-1 1v16a1 1 0 001 1h10a1 1 0 001-1V7zM14 3v4h4M9 12h6M9 16h6"/></symbol>
+<symbol id="id" viewBox="0 0 24 24"><path d="M9 9a2 2 0 100 4 2 2 0 000-4z" style="fill:var(--ic-fill);stroke:none"/><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.7-2 3-2s2.5.5 3 2M14.5 10h3.5M14.5 14h3.5"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><path d="M12 9a3 3 0 100 6 3 3 0 000-6z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
+<symbol id="bell" viewBox="0 0 24 24"><path d="M6 17v-6a6 6 0 0112 0v6z" style="fill:var(--ic-fill);stroke:none"/><path d="M6 17V11a6 6 0 1112 0v6l1.5 2h-15zM10 21h4"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><path d="M11 4.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13z" style="fill:var(--ic-fill);stroke:none"/><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.5-4.5"/></symbol>
+<symbol id="filter" viewBox="0 0 24 24"><path d="M9 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM15 13.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z" style="fill:var(--ic-fill);stroke:none"/><path d="M4 8h2.5M11.5 8H20M4 16h8.5M17.5 16H20"/><circle cx="9" cy="8" r="2.5"/><circle cx="15" cy="16" r="2.5"/></symbol>
+<symbol id="info" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+<symbol id="warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z" style="fill:var(--ic-fill);stroke:none"/><path d="M12 3l10 18H2zM12 10v5M12 18v.01"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z" style="fill:var(--ic-fill);stroke:none"/><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="finger" viewBox="0 0 24 24"><path d="M12 3a7 7 0 00-7 7v2M12 7a3 3 0 00-3 3v5c0 2 1 4 3 5M12 10v5c0 2 1 3 2 4M16 10a4 4 0 00-8 0M19 12v-2M16 14v2c0 2-.5 3.5-1.5 5"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><path d="M6 12h12v7H6z" style="fill:var(--ic-fill);stroke:none"/><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" style="fill:var(--ic-fill);stroke:none"/><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM8.5 12l2.5 2.5 4.5-5"/></symbol>
+<symbol id="globe" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="help" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z" style="fill:var(--ic-fill);stroke:none"/><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 .5c0 1.5-2.5 2-2.5 3.5M12 17v.01"/></symbol>
+<symbol id="edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" style="fill:var(--ic-fill);stroke:none"/><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+<symbol id="dl" viewBox="0 0 24 24"><path d="M5 17h14v3H5z" style="fill:var(--ic-fill);stroke:none"/><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+<symbol id="inbox" viewBox="0 0 24 24"><path d="M3 13h5l1 3h6l1-3h5v6H3z" style="fill:var(--ic-fill);stroke:none"/><path d="M3 13l3-8h12l3 8v6H3zM3 13h5l1 3h6l1-3h5"/></symbol>
+<symbol id="wifi" viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" style="fill:var(--ic-fill);stroke:none"/><path d="M2 9a15 15 0 0120 0M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20v.01"/></symbol>
+<symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" style="fill:var(--ic-fill);stroke:none"/><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="eyeOff" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 5.1A10.6 10.6 0 0112 5c6.4 0 10 7 10 7a17 17 0 01-3.2 4M6.6 6.6C3.6 8.5 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 004.2 4.2"/></symbol>
+<symbol id="building" viewBox="0 0 24 24"><path d="M5 4a1 1 0 011-1h8a1 1 0 011 1v17H5z" style="fill:var(--ic-fill);stroke:none"/><path d="M5 21V4a1 1 0 011-1h8a1 1 0 011 1v17M15 9h3a1 1 0 011 1v11M3 21h18M9 7h2M9 11h2M9 15h2"/></symbol>
+<symbol id="logo" viewBox="0 0 30 40"><path d="M14 1 4 36h22" fill="none" stroke="currentColor" stroke-width="3.2"/></symbol>
+</defs></svg>
+
+<header class="top"><div class="wrap">
+  <b style="display:flex;gap:10px;align-items:center"><svg class="i" style="color:var(--blue);width:20px;height:28px"><use href="#logo"/></svg>LockSys HR · Mobile</b>
+  <nav><a href="#colors">الألوان</a><a href="#type">الخطوط والمقاسات</a><a href="#icons">الأيقونات</a><a href="#components">المكونات</a><a href="#overlays">النوافذ</a><a href="#motion">الحركة</a><a href="#welcome">الترحيب</a><a href="#screens">الشاشات</a><a href="#rules">القواعد</a></nav>
+</div></header>
+
+<div class="wrap">
+<div class="doc-hero"><span class="tagx">Mobile App · Design System v1.0</span>
+  <h1 style="margin-top:16px">هوية واحدة لكل شاشة في تطبيق <span>LockSys HR</span></h1>
+  <p>خلفية بيضاء بألوان اللوجو، أزرار مربعة بحواف 8px، أيقونات موحدة، مقاسات مناسبة للمس، وحركة هادئة. كل شاشة جديدة تبدأ من هنا.</p></div>
+
+<!-- COLORS -->
+<section class="dsec" id="colors"><div class="idx">01</div><h2>الألوان</h2><p class="lead">اضغط على اللون لنسخ الكود. الأبيض هو الأساس، والأزرق للتفاعل، والكحلي للنصوص والعناصر القوية.</p>
+  <div class="sub">الأساسية</div><div class="swgrid" id="sw1"></div>
+  <div class="sub">الأسطح والحدود</div><div class="swgrid" id="sw2"></div>
+  <div class="sub">الحالات</div><div class="swgrid" id="sw3"></div>
+</section>
+
+<!-- TYPE -->
+<section class="dsec" id="type"><div class="idx">02</div><h2>الخطوط والمقاسات</h2><p class="lead">الخط: IBM Plex Sans Arabic. الأحجام أصغر من الويب ومناسبة للشاشة الصغيرة، ولا نزل عن 12px.</p>
+  <div class="spec">
+    <div class="r"><h1>عنوان الشاشة H1</h1><code>24 / 700</code></div>
+    <div class="r"><h2>عنوان قسم H2</h2><code>20 / 700</code></div>
+    <div class="r"><h3>عنوان كارت H3</h3><code>17 / 600</code></div>
+    <div class="r"><span>نص أساسي للمحتوى — Body</span><code>15 / 400</code></div>
+    <div class="r"><span style="font-size:var(--fs-sm)">نص ثانوي ووصف — Small</span><code>13 / 400</code></div>
+    <div class="r"><span style="font-size:var(--fs-xs);color:var(--muted)">تسمية صغيرة وشارات — XS</span><code>12 / 500</code></div>
+    <div class="r"><span class="mono">EMP-0012 · 08:30</span><code>أرقام: mono LTR</code></div>
+  </div>
+  <div class="sub">مقاسات اللمس والتخطيط</div>
+  <div class="mo">
+    <div><b>Touch target · 48px</b>أقل ارتفاع لأي عنصر قابل للضغط (الأيقونات 44).</div>
+    <div><b>Gutter · 16px</b>الهامش الجانبي للشاشة.</div>
+    <div><b>AppBar · 56px</b>Tab bar · 64px.</div>
+    <div><b>Radius</b>أزرار وحقول وكروت 8 · Dialog 12 · Bottom sheet 16.</div>
+    <div><b>المسافات</b>4 · 8 · 12 · 16 · 24 · 32 · 48</div>
+    <div><b>Safe area</b>احترم الـ Status bar وشريط الـ Home في الأسفل.</div>
+  </div>
+</section>
+
+<!-- ICONS -->
+<section class="dsec" id="icons"><div class="idx">03</div><h2>الأيقونات</h2><p class="lead">مجموعة واحدة بأسلوب Duotone خاص بـ LockSys: خط كحلي رفيع مع تعبئة زرقاء ناعمة داخل الشكل. أيقونات الأفعال (سهم، رجوع، زائد، صح) خط فقط. مرّر على أي أيقونة لتجربة التفاعل.</p>
+  <div class="mo" style="margin-bottom:24px">
+    <div><b>الشبكة · 24×24</b>Padding داخلي 3px، والشكل بيتحط في المنتصف.</div>
+    <div><b>الخط · 1.75px</b>أطراف ومفاصل مستديرة (round).</div>
+    <div><b>التعبئة</b>أزرق بشفافية 16% (على الداكن 40%، وعلى اللون 30% أبيض).</div>
+    <div><b>الأحجام</b>18 داخل الأزرار · 22 عادي · 24 التابات · 28 للعرض.</div>
+  </div>
+  <div class="icon-grid" id="icg"></div>
+  <div class="sub">السياقات</div>
+  <div class="dbox">
+    <div><span class="ctx"><svg class="i" style="width:18px;height:18px"><use href="#bell"/></svg></span><br>18</div>
+    <div><span class="ctx"><svg class="i"><use href="#bell"/></svg></span><br>22</div>
+    <div><span class="ctx"><svg class="i" style="width:24px;height:24px"><use href="#bell"/></svg></span><br>24</div>
+    <div><span class="tile__icon" style="display:inline-grid"><svg class="i"><use href="#cal"/></svg></span><br>Tile</div>
+    <div><span class="ctx" style="background:var(--navy);color:#fff;--ic-fill:rgba(22,139,255,.4)"><svg class="i"><use href="#users"/></svg></span><br>على الكحلي</div>
+    <div><span class="ctx" style="background:var(--success);color:#fff;--ic-fill:rgba(255,255,255,.3)"><svg class="i"><use href="#shield"/></svg></span><br>على لون</div>
+    <div><button class="icon-btn back-btn"><svg class="i"><use href="#back"/></svg></button><br>زر الرجوع</div>
+    <div><button class="icon-btn"><svg class="i"><use href="#filter"/></svg></button><br>Icon button</div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section class="dsec" id="components"><div class="idx">04</div><h2>المكونات</h2><p class="lead">كل مكوّن معروض بمقاس الموبايل الحقيقي (عرض 340–390px).</p>
+  <div class="panels">
+    <div class="panel"><h4>الأزرار</h4>
+      <button class="btn btn--lg">حفظ وإرسال <svg class="i"><use href="#arrow"/></svg></button>
+      <button class="btn btn--navy">إجراء ثانوي</button>
+      <button class="btn btn--ghost">إلغاء</button>
+      <button class="btn btn--danger">حذف الطلب</button>
+      <div style="display:flex;gap:10px"><button class="btn btn--sm">صغير</button><button class="btn btn--sm btn--ghost">صغير</button><button class="btn btn--sm" disabled>معطّل</button></div>
+      <button class="btn is-loading" onclick="loadDemo(this)">جاري الإرسال</button>
+      <button class="btn btn--ghost" onclick="loadDemo(this)">اضغط لتجربة الـ Loading</button>
+      <div style="display:flex;justify-content:space-between;align-items:center"><a class="text-link">رابط نصي</a><button class="icon-btn"><svg class="i"><use href="#bell"/></svg></button><button class="icon-btn"><svg class="i"><use href="#filter"/></svg></button></div>
+    </div>
+    <div class="panel"><h4>الحقول</h4>
+      <div class="field"><label>الاسم <em>*</em></label><input class="input" placeholder="اسم الموظف"><span class="field__hint">كما في الهوية</span></div>
+      <div class="field is-error"><label>رقم الهوية</label><input class="input" value="12345"><span class="field__error">يجب أن يكون 10 أرقام</span></div>
+      <div class="field"><label>بحث</label><div class="input-icon"><svg class="i"><use href="#search"/></svg><input class="input" placeholder="ابحث بالاسم..."></div></div>
+      <div class="field"><label>نوع الإجازة</label><select class="input"><option>سنوية</option><option>مرضية</option></select></div>
+      <label class="check"><input type="checkbox" checked> أوافق على الشروط</label>
+      <div style="display:flex;justify-content:space-between;align-items:center;min-height:44px"><span>إشعارات الحضور</span><span class="switch is-on" onclick="this.classList.toggle('is-on')"></span></div>
+    </div>
+    <div class="panel"><h4>الرقاقات والشارات والـ Segmented</h4>
+      <div class="chips"><span class="chip is-active"><span>الكل</span></span><span class="chip"><span>حاضر</span></span><span class="chip"><span>إجازة</span></span><span class="chip"><span>غائب</span></span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge">جديد</span><span class="badge badge--success">معتمد</span><span class="badge badge--warning">معلّق</span><span class="badge badge--danger">مرفوض</span><span class="badge badge--muted">مسودة</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge--solid">جديد</span><span class="badge badge--solid badge--success">معتمد</span><span class="badge badge--solid badge--warning">معلّق</span><span class="badge badge--solid badge--danger">مرفوض</span></div>
+      <div class="seg" id="seg1"><button class="is-active">شهري</button><button>أسبوعي</button><button>يومي</button></div>
+      <div class="alert alert--info"><svg class="i"><use href="#info"/></svg><div><b>معلومة</b>تم تحديث سياسة الإجازات.</div></div>
+      <div class="alert alert--success"><svg class="i"><use href="#check"/></svg><div><b>تم بنجاح</b>تم إرسال الطلب.</div></div>
+      <div class="alert alert--warning"><svg class="i"><use href="#warn"/></svg><div><b>تنبيه</b>عقدك ينتهي خلال 30 يومًا.</div></div>
+      <div class="alert alert--danger"><svg class="i"><use href="#warn"/></svg><div><b>خطأ</b>تعذر الاتصال بالخادم.</div></div>
+    </div>
+    <div class="panel"><h4>الكروت والقوائم</h4>
+      <div class="card tappable"><div class="stat">18 يوم<small>رصيد الإجازة المتبقي</small></div><div class="bar"><i style="--v:60%"></i></div></div>
+      <div class="card card--navy"><div class="pattern"></div><div class="card__title">كشف الراتب</div><p>راتب سبتمبر 2026 جاهز للتحميل.</p><div><button class="btn btn--sm">عرض</button></div></div>
+      <div class="list">
+        <button class="tile"><span class="tile__icon"><svg class="i"><use href="#cal"/></svg></span><span class="tile__body"><b>طلب إجازة</b><small>سنوية · 3 أيام</small></span><span class="badge badge--warning">معلّق</span></button>
+        <button class="tile"><span class="tile__icon"><svg class="i"><use href="#money"/></svg></span><span class="tile__body"><b>كشف الراتب</b><small>أغسطس 2026</small></span><svg class="i chev"><use href="#chev"/></svg></button>
+        <button class="tile"><span class="avatar">أم</span><span class="tile__body"><b>أحمد محمد</b><small>المالية · EMP-0012</small></span><span class="badge badge--success">حاضر</span></button>
+      </div>
+    </div>
+    <div class="panel"><h4>الحالات: تحميل · فارغ · خطأ</h4>
+      <div class="list"><div class="tile"><div class="skel" style="width:40px;height:40px"></div><div style="flex:1;display:grid;gap:8px"><div class="skel" style="height:12px;width:60%"></div><div class="skel" style="height:10px;width:35%"></div></div></div><div class="tile"><div class="skel" style="width:40px;height:40px"></div><div style="flex:1;display:grid;gap:8px"><div class="skel" style="height:12px;width:70%"></div><div class="skel" style="height:10px;width:45%"></div></div></div></div>
+      <div class="empty"><div class="art"><div class="pattern"></div><svg class="i"><use href="#inbox"/></svg></div><h3>لا توجد طلبات</h3><p>لم تقم بإرسال أي طلبات بعد.</p><button class="btn btn--sm">طلب جديد</button></div>
+      <div class="empty"><div class="art" style="color:var(--danger);background:var(--danger-bg)"><svg class="i"><use href="#wifi"/></svg></div><h3>لا يوجد اتصال</h3><p>تأكد من الإنترنت وحاول مرة أخرى.</p><button class="btn btn--sm btn--ghost">إعادة المحاولة</button></div>
+    </div>
+    <div class="panel"><h4>عنوان الشاشة (Screen Header)</h4>
+      <div style="border:1px solid var(--line);border-radius:var(--r-sm)"><div class="hd"><div class="kicker">الإجازات</div><h1>طلب إجازة</h1><p>اختر النوع والفترة ثم أرسل.</p></div><div style="height:16px"></div></div>
+      <p style="font-size:var(--fs-sm);color:var(--muted)">الترتيب ثابت: AppBar (زر رجوع مربع + عنوان مختصر) ← Kicker ← H1 ← وصف ← خط أزرق قصير. لا Breadcrumb في الموبايل.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OVERLAYS -->
+<section class="dsec" id="overlays"><div class="idx">05</div><h2>النوافذ والتنبيهات</h2><p class="lead">Bottom Sheet للاختيارات والفلاتر، Dialog للتأكيد فقط، Snackbar للرسائل السريعة.</p>
+  <div class="panels">
+    <div class="panel"><h4>جرّبها</h4><div class="rel" id="ov"><div style="padding:16px;color:var(--muted);font-size:var(--fs-sm)">محتوى الشاشة</div>
+        <div class="scrim" id="ov-scrim" onclick="ovClose()"></div>
+        <div class="sheet" id="ov-sheet"><h3>تصفية الحالة</h3><div style="display:grid;gap:4px"><label class="check"><input type="checkbox" checked> حاضر</label><label class="check"><input type="checkbox"> في إجازة</label><label class="check"><input type="checkbox"> غائب</label></div><button class="btn" style="margin-top:10px" onclick="ovClose()">تطبيق</button></div>
+        <div class="dialog" id="ov-dialog"><h3>إلغاء الطلب؟</h3><p>لن تتمكن من التراجع بعد الإلغاء.</p><div class="two"><button class="btn btn--ghost" onclick="ovClose()">تراجع</button><button class="btn btn--danger" onclick="ovClose();snack('تم إلغاء الطلب')">إلغاء الطلب</button></div></div>
+      </div>
+      <button class="btn btn--navy" onclick="ovOpen('sheet')">فتح Bottom Sheet</button>
+      <button class="btn btn--ghost" onclick="ovOpen('dialog')">فتح Dialog</button>
+      <button class="btn btn--ghost" onclick="snack('تم حفظ التغييرات')">إظهار Snackbar</button></div>
+    <div class="panel"><h4>Snackbar</h4><div class="snack"><svg class="i" style="color:#5fd6a0"><use href="#check"/></svg>تم إرسال الطلب<a>تراجع</a></div><div class="snack"><svg class="i" style="color:#ff8a8a"><use href="#warn"/></svg>فشل الحفظ<a>إعادة</a></div>
+      <h4 style="margin-top:8px">FAB</h4><div class="rel" style="height:120px"><div class="fab" style="bottom:16px"><svg class="i"><use href="#plus"/></svg></div></div></div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section class="dsec" id="motion"><div class="idx">06</div><h2>الحركة</h2><p class="lead">هادئة وسريعة بمنحنى واحد <code>cubic-bezier(.22,1,.36,1)</code>. الضغط على أي عنصر يعطي رد فعل فوري (Scale .98). تحترم إعداد "تقليل الحركة".</p>
+  <div class="mo">
+    <div><b>Press · 150ms</b>ضغط الأزرار والقوائم (Scale .98 + تغيير اللون).</div>
+    <div><b>UI · 300ms</b>Switch، Snackbar، Dialog، Chips.</div>
+    <div><b>Page · 320ms</b>انتقال الشاشات: Fade + Slide 24px باتجاه RTL. Bottom Sheet يطلع من تحت.</div>
+    <div><b>Reveal · 500ms</b>ظهور عناصر القائمة بتتابع 60ms (Fade + Rise 16px).</div>
+    <div><b>Progress · 900ms</b>تعبئة الأشرطة من اليمين.</div>
+    <div><b>Loading</b>Skeleton shimmer 1.4s، ودائرة 0.7s داخل الزر.</div>
+  </div>
+  <div class="dbox" style="margin-top:20px">
+    <div><div class="mb rise" id="m1"></div>Fade + Rise</div><div><div class="mb slide" id="m2"></div>Page Slide</div><div><div class="mb scale" id="m3"></div>Scale</div><div><span class="pulse-dot" style="margin-top:20px"></span><br>Pulse</div>
+    <button class="btn btn--sm" onclick="replay()">إعادة التشغيل</button>
+  </div>
+</section>
+
+<!-- WELCOME -->
+<section class="dsec" id="welcome"><div class="idx">07</div><h2>شاشات الترحيب</h2><p class="lead">Splash ثم 3 شاشات ترحيب كحد أقصى، وبعدها تسجيل الدخول. كل شاشة فكرة واحدة، والرسومات مبنية من مكونات الهوية نفسها (كروت، شارات، أيقونات) من غير صور جاهزة.</p>
+  <div class="mo" style="margin-bottom:8px">
+    <div><b>Splash · 2.6s</b>خلفية بيضاء، اللوجو الرسمي يطلع بحركة ناعمة، ثم الاسم، وشريط تقدم رفيع.</div>
+    <div><b>الترحيب · 3 شاشات</b>لوجو صغير + زر اللغة + تخطي، ثم رسم توضيحي، عنوان ووصف قصير، ثم النقاط.</div>
+    <div><b>كود الشركة</b>شاشة تظهر مرة واحدة بعد الترحيب: يكتب المستخدم الكود، فنعرض اسم الشركة وخدماتها ثم يكمل للدخول.</div>
+    <div><b>اللغة</b>زر تبديل عربي/English أعلى الشاشة، والاختيار محفوظ. الزر الرئيسي: "التالي" ثم "ابدأ الآن".</div>
+    <div><b>الحركة</b>النقطة النشطة بتتمدد، والعناصر العائمة بتتحرك بهدوء، والـ L بتترسم.</div>
+  </div>
+  <div class="gallery" id="wgal"></div>
+</section>
+
+<!-- SCREENS -->
+<section class="dsec" id="screens"><div class="idx">08</div><h2>الشاشات</h2><p class="lead">أول تليفون تجريبي: سجّل دخول، ونتنقل بالشريط السفلي. الباقي شاشات إضافية للمراجعة.</p>
+  <div class="gallery">
+
+  <!-- Interactive prototype -->
+  <div><div class="phone" id="proto">
+    <div class="status" id="pstatus"><span>9:41</span><span>●●● 100%</span></div>
+
+    <!-- LOGIN -->
+    <div class="pg" id="p-login">
+      <div class="login-art"><div class="pattern"></div><span class="lang-toggle" style="align-self:flex-end"><svg class="i"><use href="#globe"/></svg>English</span><img class="login-logo" src="assets/locksys-mark-320.png" alt="LockSys"><h2>LockSys HR</h2><p>سجّل دخولك لإدارة حضورك وإجازاتك وراتبك.</p></div>
+      <div class="body"><div class="pad stagger" style="padding-top:24px">
+        <div class="field"><label>اسم المستخدم أو رقم الموظف</label><div class="input-icon"><svg class="i"><use href="#user"/></svg><input class="input mono" placeholder="EMP-0012"></div></div>
+        <div class="field"><label>كلمة المرور</label><div class="input-icon"><svg class="i"><use href="#lock"/></svg><input class="input" type="password" placeholder="••••••••"><button class="eye" type="button" onclick="togglePw(this)"><svg class="i"><use href="#eye"/></svg></button></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><label class="check" style="min-height:40px"><input type="checkbox"> تذكرني</label><a class="text-link">نسيت كلمة المرور؟</a></div>
+        <button class="btn btn--lg" onclick="loadDemo(this,()=>nav('p-home'))">دخول <svg class="i"><use href="#arrow"/></svg></button>
+        <button class="btn btn--ghost"><svg class="i"><use href="#finger"/></svg>الدخول بالبصمة</button>
+      </div></div><div class="homebar"></div></div>
+
+    <!-- HOME -->
+    <div class="pg" id="p-home">
+      <div class="appbar"><div class="brand"><svg><use href="#logo"/></svg><div><b>LockSys</b><small>HR</small></div></div><button class="icon-btn" onclick="ovp('n')"><svg class="i"><use href="#bell"/></svg></button></div>
+      <div class="body"><div class="hd"><div class="kicker">صباح الخير</div><h1>يوسف الزرقاني</h1><p>الاثنين 29 سبتمبر 2026</p></div>
+        <div class="pad stagger">
+          <div class="clock-card"><div class="pattern"></div><div style="display:flex;justify-content:space-between;font-size:var(--fs-sm);color:var(--on-navy-muted)"><span><span class="pulse-dot"></span> مدة الدوام</span><span>الفرع الرئيسي</span></div><div class="clock-time" id="clk">08:30</div><p style="color:var(--on-navy-muted);font-size:var(--fs-sm);margin-bottom:14px">لم تسجّل حضورك بعد</p><button class="btn" onclick="checkin(this)"><svg class="i"><use href="#finger"/></svg><span>تسجيل حضور</span></button></div>
+          <div class="grid2"><div class="card"><div class="stat">18<small>رصيد الإجازة</small></div><div class="bar"><i style="--v:60%"></i></div></div><div class="card"><div class="stat">22<small>أيام حضور</small></div><span class="trend">▲ 100% التزام</span></div></div>
+          <div class="section-title"><h3>خدمات سريعة</h3><a class="text-link">عرض الكل</a></div>
+          <div class="list"><button class="tile" onclick="nav('p-leave')"><span class="tile__icon"><svg class="i"><use href="#cal"/></svg></span><span class="tile__body"><b>طلب إجازة</b><small>سنوية · مرضية · بدون راتب</small></span><svg class="i chev"><use href="#chev"/></svg></button><button class="tile"><span class="tile__icon"><svg class="i"><use href="#money"/></svg></span><span class="tile__body"><b>كشف الراتب</b><small>آخر كشف: أغسطس 2026</small></span><svg class="i chev"><use href="#chev"/></svg></button><button class="tile"><span class="tile__icon"><svg class="i"><use href="#file"/></svg></span><span class="tile__body"><b>خطاب تعريف</b><small>يصدر خلال يوم عمل</small></span><svg class="i chev"><use href="#chev"/></svg></button></div>
+        </div></div>
+      <div class="scrim" id="p-scrim" onclick="ovp()"></div>
+      <div class="sheet" id="p-n"><h3>الإشعارات</h3><div class="list"><div class="tile"><span class="tile__icon"><svg class="i"><use href="#check"/></svg></span><span class="tile__body"><b>تمت الموافقة على إجازتك</b><small>منذ ساعتين</small></span></div><div class="tile"><span class="tile__icon"><svg class="i"><use href="#money"/></svg></span><span class="tile__body"><b>كشف الراتب متاح</b><small>أمس</small></span></div></div></div>
+      <div class="tabbar"><button class="is-active" onclick="nav('p-home')"><svg class="i"><use href="#home"/></svg>الرئيسية</button><button onclick="nav('p-att')"><svg class="i"><use href="#clock"/></svg>الحضور</button><button onclick="nav('p-leave')"><svg class="i"><use href="#cal"/></svg>الإجازات</button><button onclick="nav('p-me')"><svg class="i"><use href="#user"/></svg>حسابي</button></div><div class="homebar"></div></div>
+
+    <!-- ATT -->
+    <div class="pg" id="p-att">
+      <div class="appbar"><h1 style="padding-inline-start:12px">الحضور والانصراف</h1></div>
+      <div class="body"><div class="hd"><div class="kicker">سجل الحضور</div><h1>سبتمبر 2026</h1></div>
+        <div class="pad stagger"><div class="seg"><button class="is-active">شهري</button><button>أسبوعي</button></div>
+          <div class="grid2"><div class="card"><div class="stat">22<small>أيام حضور</small></div></div><div class="card"><div class="stat">1<small>أيام تأخير</small></div></div></div>
+          <div class="list"><div class="tile"><span class="tile__body"><b>الاثنين 29</b><small class="mono">08:02 → 16:05</small></span><span class="badge badge--success">حاضر</span></div><div class="tile"><span class="tile__body"><b>الأحد 28</b><small class="mono">08:41 → 16:00</small></span><span class="badge badge--warning">تأخير</span></div><div class="tile"><span class="tile__body"><b>السبت 27</b><small>إجازة أسبوعية</small></span><span class="badge badge--muted">عطلة</span></div><div class="tile"><span class="tile__body"><b>الخميس 25</b><small class="mono">07:58 → 16:10</small></span><span class="badge badge--success">حاضر</span></div></div>
+        </div></div>
+      <div class="tabbar"><button onclick="nav('p-home')"><svg class="i"><use href="#home"/></svg>الرئيسية</button><button class="is-active" onclick="nav('p-att')"><svg class="i"><use href="#clock"/></svg>الحضور</button><button onclick="nav('p-leave')"><svg class="i"><use href="#cal"/></svg>الإجازات</button><button onclick="nav('p-me')"><svg class="i"><use href="#user"/></svg>حسابي</button></div><div class="homebar"></div></div>
+
+    <!-- LEAVE -->
+    <div class="pg" id="p-leave">
+      <div class="appbar"><button class="icon-btn back-btn" onclick="nav('p-home')"><svg class="i"><use href="#back"/></svg></button><h1>طلب إجازة</h1></div>
+      <div class="body"><div class="hd"><div class="kicker">الإجازات</div><h1>طلب إجازة جديد</h1><p>يصل طلبك للمدير المباشر للموافقة.</p></div>
+        <div class="pad stagger"><div class="alert alert--info"><svg class="i"><use href="#info"/></svg><div>رصيدك <b style="display:inline">18 يوم</b> من 30.</div></div>
+          <div class="field"><label>نوع الإجازة <em>*</em></label><select class="input"><option>سنوية</option><option>مرضية</option><option>بدون راتب</option></select></div>
+          <div class="grid2"><div class="field"><label>من <em>*</em></label><input class="input" type="date"></div><div class="field"><label>إلى <em>*</em></label><input class="input" type="date"></div></div>
+          <div class="field"><label>السبب</label><textarea class="input" placeholder="اكتب السبب..."></textarea></div>
+          <button class="btn btn--lg" onclick="loadDemo(this,()=>{snackp('تم إرسال الطلب');nav('p-home')})">إرسال الطلب <svg class="i"><use href="#arrow"/></svg></button>
+        </div></div>
+      <div class="tabbar"><button onclick="nav('p-home')"><svg class="i"><use href="#home"/></svg>الرئيسية</button><button onclick="nav('p-att')"><svg class="i"><use href="#clock"/></svg>الحضور</button><button class="is-active"><svg class="i"><use href="#cal"/></svg>الإجازات</button><button onclick="nav('p-me')"><svg class="i"><use href="#user"/></svg>حسابي</button></div><div class="homebar"></div></div>
+
+    <!-- ME -->
+    <div class="pg" id="p-me">
+      <div class="appbar"><h1 style="padding-inline-start:12px">حسابي</h1><button class="icon-btn"><svg class="i"><use href="#edit"/></svg></button></div>
+      <div class="body"><div class="pad stagger" style="padding-top:20px">
+        <div class="card card--navy profile"><div class="pattern"></div>
+          <div class="who"><span class="avatar avatar--lg">يز</span><div><h2>يوسف الزرقاني</h2><small>تقنية المعلومات · <bdi class="mono">EMP-0012</bdi></small><div style="margin-top:6px"><span class="badge badge--solid badge--success">على رأس العمل</span></div></div></div>
+          <div class="pstats"><div><b>18</b><span>رصيد الإجازة</span></div><div><b>22</b><span>أيام حضور</span></div><div><b>3</b><span>سنوات خبرة</span></div></div>
+        </div>
+        <div class="group-title">الحساب</div>
+        <div class="list">
+          <button class="tile"><span class="tile__icon"><svg class="i"><use href="#id"/></svg></span><span class="tile__body"><b>البيانات الشخصية</b><small>الاسم، الهوية، التواصل</small></span><svg class="i chev"><use href="#chev"/></svg></button>
+          <button class="tile"><span class="tile__icon"><svg class="i"><use href="#file"/></svg></span><span class="tile__body"><b>المستندات</b><small>العقد، الشهادات</small></span><svg class="i chev"><use href="#chev"/></svg></button>
+          <button class="tile"><span class="tile__icon"><svg class="i"><use href="#money"/></svg></span><span class="tile__body"><b>البيانات البنكية</b><small>الآيبان وطريقة الصرف</small></span><svg class="i chev"><use href="#chev"/></svg></button>
+        </div>
+        <div class="group-title">الأمان والتفضيلات</div>
+        <div class="list">
+          <button class="tile"><span class="tile__icon"><svg class="i"><use href="#shield"/></svg></span><span class="tile__body"><b>الأمان والبصمة</b><small>كلمة المرور والدخول السريع</small></span><svg class="i chev"><use href="#chev"/></svg></button>
+          <div class="tile"><span class="tile__icon"><svg class="i"><use href="#bell"/></svg></span><span class="tile__body"><b>الإشعارات</b><small>الحضور والطلبات</small></span><span class="switch is-on" onclick="this.classList.toggle('is-on')"></span></div>
+          <button class="tile"><span class="tile__icon"><svg class="i"><use href="#globe"/></svg></span><span class="tile__body"><b>اللغة</b></span><span class="tile__val">العربية</span><svg class="i chev"><use href="#chev"/></svg></button>
+        </div>
+        <div class="group-title">الدعم</div>
+        <div class="list"><button class="tile"><span class="tile__icon"><svg class="i"><use href="#help"/></svg></span><span class="tile__body"><b>المساعدة والدعم</b><small>تواصل مع الموارد البشرية</small></span><svg class="i chev"><use href="#chev"/></svg></button></div>
+        <button class="btn btn--ghost" onclick="nav('p-login')"><svg class="i"><use href="#out"/></svg>تسجيل الخروج</button>
+      </div></div>
+      <div class="tabbar"><button onclick="nav('p-home')"><svg class="i"><use href="#home"/></svg>الرئيسية</button><button onclick="nav('p-att')"><svg class="i"><use href="#clock"/></svg>الحضور</button><button onclick="nav('p-leave')"><svg class="i"><use href="#cal"/></svg>الإجازات</button><button class="is-active"><svg class="i"><use href="#user"/></svg>حسابي</button></div><div class="homebar"></div></div>
+
+    <div class="snack" id="psnack" style="position:absolute;inset-inline:16px;bottom:96px;z-index:30;display:none"><svg class="i" style="color:#5fd6a0"><use href="#check"/></svg><span></span></div>
+  </div><div class="cap">النموذج التفاعلي<small>يبدأ من الـ Splash ثم الترحيب ثم الدخول</small><a class="text-link" style="display:inline-block;margin-top:6px" onclick="runSplash()">↻ إعادة من البداية</a></div></div>
+
+  <!-- Static: employees -->
+  <div><div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="appbar"><button class="icon-btn back-btn"><svg class="i"><use href="#back"/></svg></button><h1>الموظفون</h1><button class="icon-btn"><svg class="i"><use href="#filter"/></svg></button></div>
+    <div class="body" style="position:relative"><div class="pad" style="gap:12px"><div class="input-icon"><svg class="i"><use href="#search"/></svg><input class="input" placeholder="ابحث بالاسم أو الرقم"></div><div class="chips"><span class="chip is-active"><span>الكل 248</span></span><span class="chip"><span>حاضر</span></span><span class="chip"><span>إجازة</span></span><span class="chip"><span>غائب</span></span></div>
+      <div class="list">
+        <button class="tile"><span class="avatar">أم</span><span class="tile__body"><b>أحمد محمد</b><small>المالية · <bdi class="mono">EMP-0012</bdi></small></span><span class="badge badge--success">حاضر</span></button>
+        <button class="tile"><span class="avatar">سع</span><span class="tile__body"><b>سارة علي</b><small>الموارد البشرية · <bdi class="mono">EMP-0031</bdi></small></span><span class="badge badge--warning">إجازة</span></button>
+        <button class="tile"><span class="avatar">خح</span><span class="tile__body"><b>خالد حسن</b><small>تقنية المعلومات · <bdi class="mono">EMP-0044</bdi></small></span><span class="badge badge--danger">غائب</span></button>
+        <button class="tile"><span class="avatar">نف</span><span class="tile__body"><b>نورة فهد</b><small>العمليات · <bdi class="mono">EMP-0058</bdi></small></span><span class="badge badge--success">حاضر</span></button>
+        <button class="tile"><span class="avatar">مر</span><span class="tile__body"><b>محمد راشد</b><small>المالية · <bdi class="mono">EMP-0071</bdi></small></span><span class="badge badge--success">حاضر</span></button>
+      </div></div><button class="fab" style="bottom:16px"><svg class="i"><use href="#plus"/></svg></button></div><div class="homebar"></div></div>
+    <div class="cap">قائمة مع بحث وفلاتر<small>AppBar + Chips + List + FAB</small></div></div>
+
+  <!-- Static: filter sheet -->
+  <div><div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="appbar"><button class="icon-btn back-btn"><svg class="i"><use href="#back"/></svg></button><h1>الموظفون</h1></div>
+    <div class="body"><div class="pad"><div class="list"><div class="tile"><span class="avatar">أم</span><span class="tile__body"><b>أحمد محمد</b><small>المالية</small></span></div><div class="tile"><span class="avatar">سع</span><span class="tile__body"><b>سارة علي</b><small>الموارد البشرية</small></span></div></div></div>
+      <div class="scrim open"></div>
+      <div class="sheet open"><h3>تصفية النتائج</h3><div class="field"><label>القسم</label><select class="input"><option>الكل</option></select></div><div style="display:grid;gap:2px;margin-top:8px"><label class="check"><input type="checkbox" checked> حاضر</label><label class="check"><input type="checkbox" checked> في إجازة</label><label class="check"><input type="checkbox"> غائب</label></div><div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:14px"><button class="btn btn--ghost">مسح</button><button class="btn">تطبيق (24)</button></div></div>
+    </div><div class="homebar"></div></div><div class="cap">Bottom Sheet للفلاتر<small>Scrim + Sheet</small></div></div>
+
+  <!-- Static: payslip -->
+  <div><div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="appbar"><button class="icon-btn back-btn"><svg class="i"><use href="#back"/></svg></button><h1>كشف الراتب</h1><button class="icon-btn"><svg class="i"><use href="#dl"/></svg></button></div>
+    <div class="body"><div class="hd"><div class="kicker">الرواتب</div><h1>أغسطس 2026</h1></div><div class="pad">
+      <div class="card card--navy"><div class="pattern"></div><p>صافي الراتب</p><div class="stat" style="color:#fff">12,450 <small style="display:inline;color:var(--on-navy-muted)">ر.س</small></div><span class="badge badge--success" style="align-self:flex-start">تم التحويل 27/08</span></div>
+      <div class="section-title"><h3>الاستحقاقات</h3></div>
+      <div class="list"><div class="tile"><span class="tile__body"><b>الراتب الأساسي</b></span><b class="mono">10,000</b></div><div class="tile"><span class="tile__body"><b>بدل سكن</b></span><b class="mono">2,500</b></div><div class="tile"><span class="tile__body"><b>بدل مواصلات</b></span><b class="mono">500</b></div></div>
+      <div class="section-title"><h3>الاستقطاعات</h3></div>
+      <div class="list"><div class="tile"><span class="tile__body"><b>التأمينات</b></span><b class="mono" style="color:var(--danger)">-550</b></div></div>
+      <button class="btn btn--ghost"><svg class="i"><use href="#dl"/></svg>تحميل PDF</button></div></div><div class="homebar"></div></div>
+    <div class="cap">تفاصيل مالية<small>Card داكن واحد فقط في الشاشة</small></div></div>
+
+  <!-- Static: empty -->
+  <div><div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="appbar"><h1 style="padding-inline-start:12px">طلباتي</h1></div>
+    <div class="body" style="display:flex;flex-direction:column;justify-content:center"><div class="empty"><div class="art"><div class="pattern"></div><svg class="i"><use href="#inbox"/></svg></div><h2>لا توجد طلبات</h2><p>لم ترسل أي طلبات بعد. ابدأ بطلب إجازة أو خطاب.</p><div style="width:100%;margin-top:12px"><button class="btn">طلب جديد <svg class="i"><use href="#plus"/></svg></button></div></div></div>
+    <div class="tabbar"><button><svg class="i"><use href="#home"/></svg>الرئيسية</button><button><svg class="i"><use href="#clock"/></svg>الحضور</button><button class="is-active"><svg class="i"><use href="#cal"/></svg>الإجازات</button><button><svg class="i"><use href="#user"/></svg>حسابي</button></div><div class="homebar"></div></div>
+    <div class="cap">حالة فارغة<small>أيقونة + عنوان + إجراء</small></div></div>
+
+  <!-- Static: loading + error -->
+  <div><div class="phone"><div class="status"><span>9:41</span><span>●●● 100%</span></div>
+    <div class="appbar"><button class="icon-btn back-btn"><svg class="i"><use href="#back"/></svg></button><h1>الإجازات</h1></div>
+    <div class="body"><div class="pad"><div class="alert alert--danger"><svg class="i"><use href="#wifi"/></svg><div><b>لا يوجد اتصال</b>عرضنا آخر بيانات محفوظة.</div></div>
+      <div class="list"><div class="tile"><div class="skel" style="width:40px;height:40px"></div><div style="flex:1;display:grid;gap:8px"><div class="skel" style="height:12px;width:60%"></div><div class="skel" style="height:10px;width:35%"></div></div></div><div class="tile"><div class="skel" style="width:40px;height:40px"></div><div style="flex:1;display:grid;gap:8px"><div class="skel" style="height:12px;width:70%"></div><div class="skel" style="height:10px;width:45%"></div></div></div><div class="tile"><div class="skel" style="width:40px;height:40px"></div><div style="flex:1;display:grid;gap:8px"><div class="skel" style="height:12px;width:50%"></div><div class="skel" style="height:10px;width:30%"></div></div></div></div>
+      <button class="btn btn--ghost">إعادة المحاولة</button></div></div><div class="homebar"></div></div>
+    <div class="cap">تحميل + خطأ اتصال<small>Skeleton + Alert</small></div></div>
+
+  </div>
+</section>
+
+<!-- RULES -->
+<section class="dsec" id="rules"><div class="idx">09</div><h2>قواعد الشاشة الجديدة</h2><p class="lead">هتتحول لاحقًا إلى Skill.</p>
+  <ul class="rules">
+    <li>ابحث عن مكوّن موجود قبل ما تنشئ واحد جديد.</li>
+    <li>التطبيق يبدأ بـ Splash ثم 3 شاشات ترحيب كحد أقصى (تظهر أول مرة فقط) ثم الدخول. زر "تخطي" موجود دائمًا.</li>
+    <li>الخلفية بيضاء. الكحلي لكارت مميز واحد فقط في الشاشة.</li>
+    <li>لا ألوان أو أحجام مكتوبة يدويًا. كله من الـ tokens.</li>
+    <li>كل شاشة: AppBar ← Kicker ← H1 ← وصف ← المحتوى.</li>
+    <li>زر رئيسي واحد في الشاشة، بعرض كامل وارتفاع 48 أو 56.</li>
+    <li>أقل مساحة للضغط 48px (44 للأيقونات).</li>
+    <li>الأزرار والحقول والكروت Radius 8px، وBottom Sheet 16px.</li>
+    <li>الأيقونات من المجموعة الموحدة فقط (خط 1.75، تعبئة زرقاء ناعمة). ممنوع أيقونات من مكتبات تانية.</li>
+    <li>زر الرجوع دايمًا مربع بحد رفيع (back-btn) في بداية الـ AppBar.</li>
+    <li>كل شاشة تفتح بـ Skeleton على شكل محتواها الحقيقي (نفس الأحجام والترتيب) بدل شاشة فاضية أو Spinner. المدة 900ms في النموذج، وفي التطبيق الحقيقي لحد وصول البيانات.</li>
+    <li>كل قائمة لازم لها: تحميل (Skeleton) وفارغة وخطأ اتصال.</li>
+    <li>Bottom Sheet للفلاتر والاختيارات، Dialog للتأكيد الخطير فقط.</li>
+    <li>الحركة من القيم المعتمدة فقط (150 / 300 / 320 / 500ms).</li>
+    <li>RTL أولًا: أسهم الرجوع والـ Slide بتتجه من اليمين. الأرقام والأكواد LTR بخط mono.</li>
+  </ul>
+</section>
+</div>
+<footer style="border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:.85rem;background:#fff"><div class="wrap">LockSys HR Mobile Design System v1.0 — مأخوذ من هوية locksys.co</div></footer>
+
+<script>
+const sw=(id,l)=>document.getElementById(id).innerHTML=l.map(([n,c,u])=>`<div class="sw" onclick="copyc('${c}')"><div class="c" style="background:${c}"></div><div><b>${n}</b><code>${c}</code><small>${u}</small></div></div>`).join('');
+sw('sw1',[['Navy','#071F3D','نصوص، Tab، كارت مميز'],['Blue (Primary)','#126BFF','أزرار وروابط وتمييز'],['Blue Bright','#168BFF','على الخلفيات الداكنة'],['Blue Pressed','#0A5CE6','حالة الضغط']]);
+sw('sw2',[['White','#FFFFFF','الخلفية الأساسية'],['Blue 50','#F5FAFF','خلفيات ناعمة'],['Blue Light','#EAF4FF','Pressed / Chips'],['Muted','#536477','نصوص ثانوية'],['Line','#DCE7F3','حدود'],['Line Strong','#BFD3EA','حدود الحقول']]);
+sw('sw3',[['Success','#1F7A4D','نجاح / حاضر'],['Danger','#C62828','خطأ / غائب'],['Warning','#B26A00','تحذير / تأخير / معلّق'],['Navy 3','#123A6B','ضغط الزر الداكن']]);
+const IC=[['home','الرئيسية'],['users','الموظفون'],['user','حساب'],['cal','التقويم'],['clock','الوقت'],['money','المال'],['file','ملف'],['id','هوية'],['gear','إعدادات'],['bell','تنبيه'],['search','بحث'],['filter','تصفية'],['info','معلومة'],['warn','تحذير'],['pin','موقع'],['finger','بصمة'],['lock','قفل'],['shield','أمان'],['globe','لغة'],['help','مساعدة'],['edit','تعديل'],['dl','تحميل'],['inbox','فارغ'],['wifi','اتصال'],['building','شركة'],['eye','إظهار'],['eyeOff','إخفاء'],['arrow','التالي'],['back','رجوع'],['chev','سهم صغير'],['plus','إضافة'],['check','تم'],['out','خروج']];
+document.getElementById('icg').innerHTML=IC.map(function(x){return '<div class="ig"><svg class="i"><use href="#'+x[0]+'"/></svg>'+x[1]+'<code>'+x[0]+'</code></div>'}).join('');
+/* ---- welcome flow builders ---- */
+const LSVG='<div class="art-l"><svg viewBox="0 0 30 40"><path d="M14 1 4 36h22"/></svg></div>';
+const ART=[
+ LSVG+'<div class="art-hub"><span class="ring"></span><span class="ring r2"></span><div class="hub-tile"><svg class="i"><use href="#finger"/></svg></div></div>'+
+  '<div class="fl fl-a"><span class="tile__icon"><svg class="i"><use href="#pin"/></svg></span><div><b>الفرع الرئيسي</b><small>داخل النطاق</small></div></div>'+
+  '<div class="fl fl-b"><div><b class="mono">08:02</b><small>وقت الحضور</small></div><span class="badge badge--success">حاضر</span></div>',
+ LSVG+'<div class="art-card"><div class="ac-head"><span class="tile__icon"><svg class="i"><use href="#cal"/></svg></span><div><b>إجازة سنوية</b><small>3 أيام</small></div></div><div class="ac-cal">'+
+  [0,1,2,3,4,5,6,7,8,9,10,11,12,13].map(function(k){return '<i class="'+([4,5,6].indexOf(k)>-1?'on':'')+'"></i>'}).join('')+'</div></div>'+
+  '<div class="fl fl-a"><span class="tile__icon" style="background:var(--success-bg);color:var(--success);--ic-fill:rgba(31,122,77,.25)"><svg class="i"><use href="#check"/></svg></span><div><b>تمت الموافقة</b><small>المدير المباشر</small></div></div>'+
+  '<div class="fl fl-b"><div><b>18 يوم</b><small>رصيد متبقٍ</small></div></div>',
+ LSVG+'<div class="art-card navy top"><small>صافي الراتب</small><div class="big">12,450 <small>ر.س</small></div><span class="badge badge--solid badge--success" style="justify-self:start">تم التحويل</span></div>'+
+  '<div class="art-card bot"><div class="ac-row"><span>الراتب الأساسي</span><b class="mono">10,000</b></div><div class="ac-row"><span>البدلات</span><b class="mono">3,000</b></div><div class="ac-row"><span>الاستقطاعات</span><b class="mono">-550</b></div></div>'+
+  '<div class="fl fl-b" style="bottom:auto;top:52%"><span class="tile__icon"><svg class="i"><use href="#shield"/></svg></span><div><b>بياناتك محمية</b><small>متوافق مع PDPL</small></div></div>'
+];
+const OB=[
+ ['سجّل حضورك بلمسة واحدة','بالبصمة أو بموقع الفرع، تسجّل حضورك وانصرافك من هاتفك في ثوانٍ.'],
+ ['كل طلباتك في مكان واحد','قدّم إجازتك وخطاباتك، وتابع الموافقات لحظة بلحظة بدون أوراق.'],
+ ['راتبك ومستنداتك بأمان','اطّلع على كشف راتبك وعقدك في أي وقت، وبياناتك محمية بالكامل.']
+];
+function splashHTML(){return '<div class="splash"><div class="pattern"></div><img class="splash-logo" src="assets/locksys-mark-320.png" alt="LockSys"><div class="splash-name"><b>LockSys HR</b><small>الموارد البشرية</small></div><div class="splash-bar"><i></i></div><span class="splash-ver">الإصدار 1.0.0</span></div><div class="homebar"></div>'}
+function onbHTML(i,live){
+  var last=i===2,nx=live?(last?"nav('p-company')":"nav('p-o"+(i+2)+"')"):'';
+  return '<div class="onb"><div class="onb-top"><img class="onb-logo" src="assets/locksys-mark-160.png" alt="LockSys"><span class="onb-end"><span class="lang-toggle"><svg class="i"><use href="#globe"/></svg>English</span><a class="text-link"'+(last?' style="visibility:hidden"':'')+(live?' onclick="nav(\'p-company\')"':'')+'>تخطي</a></span></div>'+
+   '<div class="onb-art"><div class="pattern"></div>'+ART[i]+'</div>'+
+   '<div class="onb-txt"><h1>'+OB[i][0]+'</h1><p>'+OB[i][1]+'</p></div>'+
+   '<div class="onb-foot"><div class="dots">'+[0,1,2].map(function(k){return '<i class="'+(k===i?'on':'')+'"></i>'}).join('')+'</div>'+
+   '<button class="btn btn--lg"'+(live?' onclick="'+nx+'"':'')+'>'+(last?'ابدأ الآن':'التالي')+' <svg class="i"><use href="#arrow"/></svg></button></div></div><div class="homebar"></div>';
+}
+function companyHTML(found,live){
+  var hero='<div class="login-art"><div class="pattern"></div><span class="lang-toggle" style="align-self:flex-end"><svg class="i"><use href="#globe"/></svg>English</span><img class="login-logo" src="assets/locksys-mark-320.png" alt="LockSys"><h2>LockSys HR</h2><p>أدخل الكود الذي حصلت عليه من شركتك لنوصلك بخدماتها.</p></div>';
+  var card='<div class="card" id="cc-card" style="box-shadow:var(--sh-2);gap:14px'+(found?'':';display:none')+'"><div style="display:flex;gap:12px;align-items:center"><span class="tile__icon" style="background:var(--success);border-color:var(--success);color:#fff;--ic-fill:rgba(255,255,255,.3)"><svg class="i"><use href="#check"/></svg></span><div><small style="color:var(--muted);font-size:var(--fs-xs);display:block">تم التعرف على الشركة</small><b style="font-size:var(--fs-h3)" dir="ltr">LockSys Solutions</b></div></div><div><b style="font-size:var(--fs-sm)">الخدمات المتاحة</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><span class="badge">الحضور</span><span class="badge">الإجازات</span><span class="badge">كشف الراتب</span></div></div><div style="display:flex;gap:8px;color:var(--muted);font-size:var(--fs-xs);align-items:center"><svg class="i" style="width:18px;height:18px"><use href="#shield"/></svg>لن نطلب الكود مرة أخرى على هذا الجهاز.</div></div>';
+  var body='<div class="body"><div class="pad" style="padding-top:8px"><div class="hd plain" style="padding:0"><div class="kicker">الخطوة الأولى</div><h1>كود الشركة</h1></div>'+
+   '<div class="field"><label>كود الشركة</label><div class="input-icon"><svg class="i"><use href="#building"/></svg><input class="input mono" id="'+(live?'cc':'')+'" value="'+(found?'LOCKSYS':'')+'" placeholder="مثال: ACME01" style="text-transform:uppercase"><span class="cc-ok" style="'+(found?'display:block':'')+'"><svg class="i"><use href="#check"/></svg></span></div><span class="field__hint">حروف وأرقام إنجليزية، ستجده لدى مسؤول الموارد البشرية.</span></div>'+
+   card+
+   '<button class="btn btn--lg" id="'+(live?'ccbtn':'')+'"'+(live?' onclick="ccGo(this)"':'')+'>'+(found?'متابعة':'تحقق من الكود')+' <svg class="i"><use href="#arrow"/></svg></button>'+
+   '<div class="alert alert--info" style="box-shadow:none;background:var(--blue-50)"><svg class="i"><use href="#help"/></svg><div><b>ليس لديك كود؟</b>تواصل مع مسؤول الموارد البشرية في شركتك.</div></div>'+
+   '</div></div><div class="homebar"></div>';
+  return hero+body;
+}
+var ccFound=false;
+function ccGo(b){
+  if(ccFound){nav('p-login');return}
+  var inp=document.getElementById('cc');if(!inp.value.trim()){inp.focus();return}
+  b.classList.add('is-loading');
+  setTimeout(function(){b.classList.remove('is-loading');ccFound=true;
+    document.getElementById('cc-card').style.display='flex';
+    document.querySelector('#p-company .cc-ok').style.display='block';
+    b.firstChild.nodeValue='متابعة ';},900);
+}
+function statusHTML(dark){return '<div class="status'+(dark?' on-dark':'')+'"><span>9:41</span><span>●●● 100%</span></div>'}
+// live pages inside the prototype
+document.getElementById('psnack').insertAdjacentHTML('beforebegin',
+  '<div class="pg" id="p-splash">'+splashHTML()+'</div><div class="pg" id="p-company">'+companyHTML(false,true)+'</div>'+[0,1,2].map(function(i){return '<div class="pg" id="p-o'+(i+1)+'">'+onbHTML(i,true)+'</div>'}).join(''));
+// static gallery
+(function(){
+  var caps=[['Splash','خلفية بيضاء + اللوجو الرسمي'],['ترحيب 1/3','الحضور'],['ترحيب 2/3','الإجازات والطلبات'],['ترحيب 3/3','الراتب والمستندات'],['كود الشركة','أول مرة فقط، قبل الدخول'],['كود الشركة: تم التعرف','اسم الشركة + الخدمات المتاحة']];
+  var items=[statusHTML(false)+'<div class="pg on">'+splashHTML()+'</div>'].concat([0,1,2].map(function(i){return statusHTML(false)+'<div class="pg on">'+onbHTML(i,false)+'</div>'})).concat([statusHTML(false)+'<div class="pg on">'+companyHTML(false,false)+'</div>',statusHTML(false)+'<div class="pg on">'+companyHTML(true,false)+'</div>']);
+  document.getElementById('wgal').innerHTML=items.map(function(h,i){return '<div><div class="phone">'+h+'</div><div class="cap">'+caps[i][0]+'<small>'+caps[i][1]+'</small></div></div>'}).join('');
+})();
+var spT;
+function runSplash(){
+  nav('p-splash');
+  clearTimeout(spT);spT=setTimeout(function(){if(document.getElementById('p-splash').classList.contains('on'))nav('p-o1')},2600);
+}
+function togglePw(b){var i=b.parentNode.querySelector('input'),show=i.type==='password';i.type=show?'text':'password';b.querySelector('use').setAttribute('href',show?'#eyeOff':'#eye')}
+function toast(m){const t=document.createElement('div');t.className='toastx';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+function copyc(c){navigator.clipboard&&navigator.clipboard.writeText(c);toast('تم نسخ '+c)}
+function loadDemo(b,cb){b.classList.add('is-loading');setTimeout(()=>{b.classList.remove('is-loading');cb&&cb()},1200)}
+// overlays demo
+function ovOpen(w){document.getElementById('ov-scrim').classList.add('open');document.getElementById(w==='sheet'?'ov-sheet':'ov-dialog').classList.add('open')}
+function ovClose(){['ov-scrim','ov-sheet','ov-dialog'].forEach(i=>document.getElementById(i).classList.remove('open'))}
+function snack(m){const s=document.createElement('div');s.className='snack';s.style.cssText='position:fixed;bottom:20px;inset-inline:20px;max-width:360px;margin:auto;z-index:300;animation:rise .3s var(--ease-out)';s.innerHTML='<svg class="i" style="color:#5fd6a0"><use href="#check"/></svg>'+m;document.body.appendChild(s);setTimeout(()=>s.remove(),2200)}
+document.querySelectorAll('.seg').forEach(s=>s.addEventListener('click',e=>{if(e.target.tagName==='BUTTON'){s.querySelectorAll('button').forEach(b=>b.classList.remove('is-active'));e.target.classList.add('is-active')}}));
+document.querySelectorAll('.chips').forEach(s=>s.addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){s.querySelectorAll('.chip').forEach(b=>b.classList.remove('is-active'));c.classList.add('is-active')}}));
+// prototype
+const K=(w,h,ex)=>`<div class="skel" style="width:${w};height:${h};${ex||''}"></div>`;
+const TILE=()=>`<div class="tile">${K('40px','40px','border-radius:8px;flex:none')}<div style="flex:1;display:grid;gap:8px">${K('60%','12px')}${K('35%','10px')}</div></div>`;
+const LIST=n=>`<div class="list">${TILE().repeat(n)}</div>`;
+const HEAD=()=>`<div style="padding:20px 16px 4px;display:grid;gap:10px">${K('28%','12px')}${K('55%','24px')}${K('40%','12px')}</div>`;
+const PAD=x=>`<div style="padding:16px;display:grid;gap:16px">${x}</div>`;
+const CARD=h=>K('100%',h,'border-radius:8px');
+const SK={
+  'p-home':()=>HEAD()+PAD(CARD('150px')+`<div class="grid2">${CARD('86px')}${CARD('86px')}</div>`+K('35%','16px')+LIST(3)),
+  'p-att':()=>HEAD()+PAD(K('100%','44px','border-radius:8px')+`<div class="grid2">${CARD('76px')}${CARD('76px')}</div>`+LIST(4)),
+  'p-leave':()=>HEAD()+PAD(K('100%','54px','border-radius:8px')+K('100%','48px','border-radius:8px')+`<div class="grid2">${K('100%','48px','border-radius:8px')}${K('100%','48px','border-radius:8px')}</div>`+K('100%','96px','border-radius:8px')+K('100%','56px','border-radius:8px')),
+  'p-me':()=>PAD(CARD('190px')+K('25%','12px')+LIST(3)+K('30%','12px')+LIST(3))
+};
+function nav(id){
+  document.querySelectorAll('#proto .pg').forEach(p=>p.classList.toggle('on',p.id===id));
+  document.getElementById('pstatus').className='status';
+  const pg=document.getElementById(id),b=pg.querySelector('.body');
+  if(b)b.scrollTop=0;
+  if(SK[id]&&b){
+    let w=b.querySelector('.sk-wrap');
+    if(!w){w=document.createElement('div');w.className='sk-wrap';w.innerHTML=SK[id]();b.prepend(w)}
+    pg.classList.add('is-loading');clearTimeout(pg._t);pg._t=setTimeout(()=>pg.classList.remove('is-loading'),900);
+  }
+}
+function ovp(w){const s=document.getElementById('p-scrim'),n=document.getElementById('p-n');const o=w&&!n.classList.contains('open');s.classList.toggle('open',o);n.classList.toggle('open',o)}
+function snackp(m){const s=document.getElementById('psnack');s.querySelector('span').textContent=m;s.style.display='flex';s.style.animation='none';void s.offsetWidth;s.style.animation='rise .3s var(--ease-out)';setTimeout(()=>s.style.display='none',2400)}
+function checkin(b){b.classList.add('is-loading');setTimeout(()=>{b.classList.remove('is-loading');b.querySelector('span').textContent='تم تسجيل الحضور ✓';b.previousElementSibling.textContent='سُجّل حضورك 08:02 — يوم موفق!';snackp('تم تسجيل الحضور')},1100)}
+setInterval(()=>{const c=document.getElementById('clk');if(c){const d=new Date();c.textContent=d.toTimeString().slice(0,5)}},1000);
+runSplash();
+function replay(){['m1','m2','m3'].forEach(i=>{const e=document.getElementById(i);e.classList.remove('go');void e.offsetWidth;e.classList.add('go')})}
+</script>
+</body>
+</html>

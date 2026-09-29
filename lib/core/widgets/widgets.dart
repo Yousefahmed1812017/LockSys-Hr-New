@@ -1,0 +1,28 @@
+/// One import for the whole design system:
+///   import 'package:your_app/core/widgets/widgets.dart';
+library;
+
+export '../icons/app_icons.dart';
+export '../l10n/locale_controller.dart';
+export '../theme/app_colors.dart';
+export '../theme/app_text.dart';
+export '../theme/app_theme.dart';
+export '../theme/app_tokens.dart';
+export 'app_alert.dart';
+export 'app_badge.dart';
+export 'app_bottom_nav.dart';
+export 'app_brand_hero.dart';
+export 'app_button.dart';
+export 'app_card.dart';
+export 'app_chips.dart';
+export 'app_empty_state.dart';
+export 'app_icon.dart';
+export 'app_language_toggle.dart';
+export 'app_list.dart';
+export 'app_logo_mark.dart';
+export 'app_overlays.dart';
+export 'app_screen.dart';
+export 'app_skeleton.dart';
+export 'app_text_field.dart';
+export 'l_pattern.dart';
+export 'pressable.dart';
