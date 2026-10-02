@@ -1,0 +1,259 @@
+{
+  "info": {
+    "name": "LockSys HR - App API",
+    "description": "Central API of the LockSys HR mobile app (ORDS). Every request uses HTTP Basic auth from the variables apiUser / apiPassword. Errors always look like {success:false, error:{code, message_ar, message_en}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Resolve company (success)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(json.success).to.eql(true));",
+                  "pm.test('data has baseUrl, features, defaultLanguage', () => { pm.expect(json.data.baseUrl).to.match(/^https:\\/\\/.+\\/$/); pm.expect(json.data.features).to.be.an('array'); pm.expect(['ar','en']).to.include(json.data.defaultLanguage); });",
+                  "pm.collectionVariables.set('resolvedBaseUrl', json.data.baseUrl);",
+                  "pm.test('features form a consistent tree: every dotted code has its parent', () => { json.data.features.filter(k => k.includes('.')).forEach(k => pm.expect(json.data.features, k).to.include(k.substring(0, k.lastIndexOf('.')))); });",
+                  "pm.test('1000: names and language policy', () => { if (pm.collectionVariables.get('companyCode') !== '1000') return; pm.expect(json.data.arabicName).to.be.a('string').and.not.empty; pm.expect(json.data.name).to.be.a('string').and.not.empty; pm.expect(json.data.multiLanguage).to.be.a('boolean'); pm.expect(['ar','en']).to.include(json.data.defaultLanguage); });",
+                  "pm.test('1000: sign-in features (password, mobile, e-mail, recovery) with their channels', () => { if (pm.collectionVariables.get('companyCode') !== '1000') return; pm.expect(json.data.features).to.include.members(['auth','auth.password','auth.phone','auth.phone.via_sms','auth.email','auth.email.via_email','auth.forgot','auth.forgot.email','auth.forgot.phone.via_whatsapp']); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyCode}}"
+              ]
+            },
+            "description": "Returns the company's API base URL, names (Arabic + English), language policy and its effective features. `features` is a flat list of dotted codes: a sub feature only appears while every ancestor is on (auth > auth.phone > auth.phone.via_sms). The code is case-insensitive.",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{apiUser}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{apiPassword}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Company not found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                  "const json = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(json.success).to.eql(false));",
+                  "pm.test('error.code = COMPANY_NOT_FOUND', () => pm.expect(json.error.code).to.eql('COMPANY_NOT_FOUND'));",
+                  "pm.test('has Arabic + English messages', () => { pm.expect(json.error.message_ar).to.be.a('string'); pm.expect(json.error.message_en).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{unknownCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{unknownCode}}"
+              ]
+            },
+            "description": "Unknown code -> 404 COMPANY_NOT_FOUND.",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{apiUser}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{apiPassword}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Wrong password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                  "const json = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(json.success).to.eql(false));",
+                  "pm.test('error.code = UNAUTHORIZED', () => pm.expect(json.error.code).to.eql('UNAUTHORIZED'));",
+                  "pm.test('has Arabic + English messages', () => { pm.expect(json.error.message_ar).to.be.a('string'); pm.expect(json.error.message_en).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyCode}}"
+              ]
+            },
+            "description": "Bad credentials -> 401 UNAUTHORIZED.",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{apiUser}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "wrong-password",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "No credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                  "const json = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(json.success).to.eql(false));",
+                  "pm.test('error.code = UNAUTHORIZED', () => pm.expect(json.error.code).to.eql('UNAUTHORIZED'));",
+                  "pm.test('has Arabic + English messages', () => { pm.expect(json.error.message_ar).to.be.a('string'); pm.expect(json.error.message_en).to.be.a('string'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyCode}}"
+              ]
+            },
+            "description": "No Authorization header -> 401 UNAUTHORIZED.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://erp.lock-sys.com/ords/locksys/app/v1"
+    },
+    {
+      "key": "apiUser",
+      "value": "Locksys"
+    },
+    {
+      "key": "apiPassword",
+      "value": "Mo123!@#"
+    },
+    {
+      "key": "companyCode",
+      "value": "1000"
+    },
+    {
+      "key": "unknownCode",
+      "value": "NOPE"
+    },
+    {
+      "key": "resolvedBaseUrl",
+      "value": ""
+    }
+  ]
+}

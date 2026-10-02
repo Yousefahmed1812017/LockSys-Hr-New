@@ -5,7 +5,12 @@
 
 /// Raw vector data for one icon. Render it with [AppIcon].
 class AppIconData {
-  const AppIconData(this.name, this.line, {this.accent, this.directional = false});
+  const AppIconData(
+    this.name,
+    this.line, {
+    this.accent,
+    this.directional = false,
+  });
 
   final String name;
 
@@ -35,10 +40,7 @@ abstract final class AppIcons {
     r'<path d="M15 6l-6 6 6 6"/>',
     directional: true,
   );
-  static const plus = AppIconData(
-    'plus',
-    r'<path d="M12 5v14M5 12h14"/>',
-  );
+  static const plus = AppIconData('plus', r'<path d="M12 5v14M5 12h14"/>');
   static const check = AppIconData(
     'check',
     r'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
@@ -105,12 +107,19 @@ abstract final class AppIcons {
   static const filter = AppIconData(
     'filter',
     r'<path d="M4 8h2.5M11.5 8H20M4 16h8.5M17.5 16H20"/><circle cx="9" cy="8" r="2.5"/><circle cx="15" cy="16" r="2.5"/>',
-    accent: r'M9 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM15 13.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z',
+    accent:
+        r'M9 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM15 13.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z',
   );
   static const info = AppIconData(
     'info',
     r'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/>',
     accent: r'M12 3a9 9 0 100 18 9 9 0 000-18z',
+  );
+  static const star = AppIconData(
+    'star',
+    r'<path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9l-5.3 2.7 1-5.8L3.5 9.7l5.9-.9z"/>',
+    accent:
+        r'M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9l-5.3 2.7 1-5.8L3.5 9.7l5.9-.9z',
   );
   static const warning = AppIconData(
     'warning',
@@ -183,7 +192,47 @@ abstract final class AppIcons {
     accent: r'M5 4a1 1 0 011-1h8a1 1 0 011 1v17H5z',
   );
 
+  static const phone = AppIconData(
+    'phone',
+    r'<rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/>',
+    accent: r'M7.5 4.5h9v12h-9z',
+  );
+  static const mail = AppIconData(
+    'mail',
+    r'<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7.5l8.5 6 8.5-6"/>',
+    accent: r'M4 7.5l8 5.7 8-5.7V17.5H4z',
+  );
+  static const message = AppIconData(
+    'message',
+    r'<path d="M4 5h16a1 1 0 011 1v10a1 1 0 01-1 1H10l-4.5 3.5V17H4a1 1 0 01-1-1V6a1 1 0 011-1z"/><path d="M8 10h8M8 13h5"/>',
+    accent:
+        r'M4 5h16a1 1 0 011 1v10a1 1 0 01-1 1H10l-4.5 3.5V17H4a1 1 0 01-1-1V6a1 1 0 011-1z',
+  );
+  static const chat = AppIconData(
+    'chat',
+    r'<path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z"/><path d="M9 9c.3 2.6 2.4 4.8 5.6 5.6l1.3-1.5-2-1-.9.9a4.7 4.7 0 01-2.3-2.3l.9-.9-1-2z"/>',
+    accent: r'M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z',
+  );
+
+  static const camera = AppIconData(
+    'camera',
+    r'<path d="M4 8a2 2 0 012-2h2l1.5-2h5L16 6h2a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><circle cx="12" cy="12.5" r="3.5"/>',
+    accent: r'M4 8a2 2 0 012-2h12a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2z',
+  );
+  static const qr = AppIconData(
+    'qr',
+    r'<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM18.5 14H20M14 18.5v1.5M17.5 17.5H20v2.5h-2.5z"/>',
+    accent: r'M5 5h4v4H5zM15 5h4v4h-4zM5 15h4v4H5z',
+  );
+
   static const List<AppIconData> all = [
+    star,
+    camera,
+    qr,
+    phone,
+    mail,
+    message,
+    chat,
     building,
     eye,
     eyeOff,

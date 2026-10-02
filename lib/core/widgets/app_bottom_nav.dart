@@ -97,6 +97,12 @@ class _NavButton extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 item.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                // A 64px bar cannot grow with the user's font size: cap it.
+                textScaler: MediaQuery.textScalerOf(
+                  context,
+                ).clamp(maxScaleFactor: 1.15),
                 style: AppText.xs.copyWith(
                   fontSize: 11,
                   color: color,

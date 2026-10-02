@@ -1,0 +1,2 @@
+# Copy to maps.properties (git-ignored) and put the Google Maps API key here.
+MAPS_API_KEY=

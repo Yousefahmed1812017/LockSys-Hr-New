@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LockSys HR - تصميم جديد للتطبيق</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ tokens: every color of the app comes from here ============ */
+:root{
+  --p1:#126BFF; --p2:#00B8D9;           /* primary gradient */
+  --bg:#EEF4FF;                         /* app background (never plain white) */
+  --surface:#FFFFFF; --ink:#0B1F3B; --muted:#5B6B83; --line:#DDE7F5;
+  --accent:#FF8A3D;
+  --ok:#16A34A;   --ok-bg:#DDF7E7;
+  --bad:#E5484D;  --bad-bg:#FDE4E5;
+  --leave:#F59E0B;--leave-bg:#FFF0CC;
+  --hol:#8B5CF6;  --hol-bg:#EBE4FF;
+  --rest:#14B8A6; --rest-bg:#D7F5F1;
+  --mis:#3B82F6;  --mis-bg:#DCEBFF;
+  --future:#E6ECF6;
+  --r:20px; --shadow:0 8px 24px rgba(11,31,59,.08); --card-border:transparent; --card-bg:var(--surface);
+}
+body[data-pal="sunset"]{--p1:#5B3DF5;--p2:#FF6B9D;--bg:#F5F0FF;--accent:#FFB020;--line:#E6DEFA}
+body[data-pal="emerald"]{--p1:#0E9F6E;--p2:#12B5CB;--bg:#EAF9F3;--accent:#FF7A59;--line:#D3EEE3}
+body[data-pal="night"]{--p1:#3B82F6;--p2:#8B5CF6;--bg:#0E1626;--surface:#17233A;--ink:#EAF1FF;--muted:#9DB0CF;--line:#25354F;--shadow:0 8px 24px rgba(0,0,0,.35);
+  --ok-bg:#12351F;--bad-bg:#3A1A1C;--leave-bg:#3C2F0E;--hol-bg:#2A2150;--rest-bg:#0F3330;--mis-bg:#15294A;--future:#1D2B45}
+body[data-card="flat"]{--r:14px;--shadow:none;--card-border:var(--line)}
+body[data-card="glass"]{--r:24px;--card-bg:rgba(255,255,255,.62);--card-border:rgba(255,255,255,.7);--shadow:0 10px 30px rgba(18,107,255,.14)}
+body[data-pal="night"][data-card="glass"]{--card-bg:rgba(23,35,58,.7);--card-border:rgba(255,255,255,.08)}
+*{box-sizing:border-box;margin:0}
+body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:#CBD6E8;color:var(--ink);padding:0 0 60px}
+body[data-pal="night"]{background:#05080F}
+.top{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #DDE7F5;padding:12px 20px;display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+body[data-pal="night"] .top{background:#0B1220;border-color:#25354F;color:#EAF1FF}
+.top h1{font-size:17px;margin-inline-end:auto}
+.grp{display:flex;gap:6px;align-items:center;font-size:12px;color:#5B6B83}
+.grp button{border:1px solid #BFD3EA;background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer;color:#0B1F3B}
+.grp button.on{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;border-color:transparent}
+.sw{width:10px;height:10px;border-radius:50%;display:inline-block;margin-inline-end:4px}
+.gallery{display:flex;gap:28px;overflow-x:auto;padding:28px 24px;align-items:flex-start}
+.cap{font-size:13px;font-weight:600;margin:0 0 10px;color:#34445C;text-align:center}
+body[data-pal="night"] .cap{color:#9DB0CF}
+.phone{width:360px;height:740px;border-radius:38px;background:var(--bg);box-shadow:0 18px 50px rgba(11,31,59,.28),0 0 0 9px #0B1220;position:relative;overflow:hidden;flex:none;display:flex;flex-direction:column}
+.sb{display:flex;justify-content:space-between;padding:12px 22px 4px;font-size:12px;font-weight:600;color:var(--ink);direction:ltr}
+.scr{flex:1;overflow:hidden;position:relative}
+/* ---- building blocks ---- */
+.blob{position:absolute;inset:-60px -60px auto -60px;height:330px;background:linear-gradient(135deg,var(--p1),var(--p2));border-radius:0 0 60% 60%/0 0 40% 40%}
+.bar{display:flex;align-items:center;gap:10px;padding:8px 16px}
+.bar .t{flex:1;text-align:center;font-weight:700;font-size:16px}
+.bar.on-blob{color:#fff}
+.sq{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:var(--card-bg);border:1px solid var(--card-border);box-shadow:var(--shadow);color:var(--ink)}
+.on-blob .sq{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.35);color:#fff;box-shadow:none}
+.pad{padding:0 16px;position:relative}
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;backdrop-filter:blur(8px)}
+.hero{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;border-radius:var(--r);padding:16px;box-shadow:0 12px 28px color-mix(in srgb,var(--p1) 40%,transparent)}
+.hero small{opacity:.85}
+.big{font-size:34px;font-weight:700;line-height:1.1}
+.row{display:flex;align-items:center;gap:10px}
+.sp{flex:1}
+.h2{font-size:18px;font-weight:700}.h3{font-size:15px;font-weight:700}.sm{font-size:12px;color:var(--muted)}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600}
+.ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:#fff;flex:none}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{border-radius:var(--r);padding:12px 6px;text-align:center;color:#fff;font-size:12px;font-weight:600;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;align-items:center}
+.tile .ic{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.25);display:grid;place-items:center}
+.btn{display:block;text-align:center;border-radius:16px;padding:14px;font-weight:700;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 10px 22px color-mix(in srgb,var(--p1) 38%,transparent)}
+.btn.ghost{background:var(--card-bg);color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.field{background:var(--card-bg);border:1px solid var(--line);border-radius:16px;padding:14px;color:var(--muted);font-size:14px;display:flex;gap:10px;align-items:center}
+svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .d{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:13px;position:relative}
+.cal .wd{font-size:10px;color:var(--muted);text-align:center;font-weight:600}
+.star{position:absolute;top:2px;inset-inline-end:3px;font-size:10px;color:var(--ok)}
+.fig{flex:1;text-align:center;border-radius:14px;padding:8px 2px}
+.fig b{display:block;font-size:19px}.fig span{font-size:10px}
+.map{position:absolute;inset:0;background:
+ linear-gradient(#fff 3px,transparent 3px) 0 0/62px 62px,linear-gradient(90deg,#fff 3px,transparent 3px) 0 0/62px 62px,#DCE8F4}
+.zone{position:absolute;width:190px;height:190px;border-radius:50%;background:color-mix(in srgb,var(--p1) 20%,transparent);border:3px solid var(--p1);inset-inline-start:85px;top:120px}
+.pin{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--ok);border:4px solid #fff;box-shadow:0 0 0 8px color-mix(in srgb,var(--ok) 30%,transparent);inset-inline-start:150px;top:196px}
+.cam{background:linear-gradient(#123B6E,#071F3D);border-radius:var(--r);height:330px;position:relative;overflow:hidden}
+.oval{position:absolute;inset:34px 64px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 400px rgba(2,11,24,.55)}
+.arc{position:absolute;inset:34px 64px;border-radius:50%;border:6px solid transparent;border-top-color:#39D98A;border-inline-end-color:#39D98A;transform:rotate(-40deg)}
+.dots{display:flex;gap:6px;justify-content:center}.dots i{width:28px;height:5px;border-radius:3px;background:var(--line)}.dots i.on{background:var(--ok)}
+.nav{display:flex;justify-content:space-around;padding:10px 6px 16px;background:var(--card-bg);border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+.nav div{display:flex;flex-direction:column;align-items:center;gap:3px}.nav .a{color:var(--p1);font-weight:700}
+</style>
+</head>
+<body data-pal="ocean" data-card="soft">
+<div class="top">
+  <h1>LockSys HR · تصميم جديد (للمراجعة قبل التطبيق)</h1>
+  <div class="grp" id="gPal">اللون:
+    <button data-v="ocean" class="on"><i class="sw" style="background:#126BFF"></i>أوشن</button>
+    <button data-v="sunset"><i class="sw" style="background:#5B3DF5"></i>غروب</button>
+    <button data-v="emerald"><i class="sw" style="background:#0E9F6E"></i>زمردي</button>
+    <button data-v="night"><i class="sw" style="background:#0E1626"></i>ليلي</button>
+  </div>
+  <div class="grp" id="gCard">الكارد:
+    <button data-v="soft" class="on">ناعم بظل</button><button data-v="flat">مسطّح بإطار</button><button data-v="glass">زجاجي</button>
+  </div>
+  <div class="grp" id="gLang">اللغة: <button data-v="ar" class="on">عربي</button><button data-v="en">English</button></div>
+</div>
+<div class="gallery" id="g"></div>
+<script>
+let lang='ar';
+const L=(a,e)=>lang==='ar'?a:e;
+const I={
+ back:'<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+ bell:'<svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0112 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 004 0"/></svg>',
+ clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+ cal:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+ money:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><circle cx="12" cy="12" r="2.5"/></svg>',
+ file:'<svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/></svg>',
+ id:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="11" r="2"/><path d="M14 10h4M14 14h3M6 16c.5-2 5.5-2 6 0"/></svg>',
+ shield:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/></svg>',
+ globe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>',
+ help:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4M12 17v.01"/></svg>',
+ loc:'<svg viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+ user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></svg>',
+ lock:'<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>',
+ check:'<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>',
+ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ home:'<svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>',
+ star:'<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:currentColor"><path d="M12 3l2.7 5.5 6 .9-4.4 4.2 1 6L12 16.8 6.7 19.6l1-6L3.3 9.4l6-.9z"/></svg>',
+ fwd:'<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
+};
+const sb=()=>`<div class="sb"><span>9:41</span><span>●●● ▮</span></div>`;
+const phone=(title,body)=>`<div><div class="cap">${title}</div><div class="phone">${sb()}<div class="scr">${body}</div></div></div>`;
+const ico=(c,i)=>`<div class="ico" style="background:${c}">${I[i]}</div>`;
+const barBack=(t,on)=>`<div class="bar ${on?'on-blob':''}"><div class="sq">${I.back}</div><div class="t">${t}</div><div style="width:40px"></div></div>`;
+const g=(a,b)=>`linear-gradient(135deg,${a},${b})`;
+
+const S={};
+S.login=()=>phone(L('الدخول','Sign in'),`
+ <div class="blob" style="height:300px"></div>
+ <div class="pad" style="padding-top:34px;text-align:center;color:#fff">
+  <div style="width:74px;height:74px;border-radius:24px;background:#fff;margin:0 auto 12px;display:grid;place-items:center;color:var(--p1);font-weight:800;font-size:30px;box-shadow:var(--shadow)">L</div>
+  <div class="h2" style="color:#fff">LockSys HR</div><div class="sm" style="color:#E6F0FF">${L('الموارد البشرية في جيبك','HR in your pocket')}</div></div>
+ <div class="pad" style="margin-top:62px"><div class="card" style="display:grid;gap:12px;padding:18px">
+  <div class="h2">${L('تسجيل الدخول','Sign in')}</div>
+  <div class="row" style="background:var(--bg);border-radius:14px;padding:4px"><div class="sp btn" style="padding:9px;font-size:12px">${L('اسم المستخدم','Username')}</div><div class="sp sm" style="text-align:center">${L('الموبايل','Mobile')}</div><div class="sp sm" style="text-align:center">${L('البريد','Email')}</div></div>
+  <div class="field">${I.user}${L('اسم المستخدم أو رقم الموظف','Username or employee no.')}</div>
+  <div class="field">${I.lock}${L('كلمة المرور','Password')}</div>
+  <div class="btn">${L('دخول','Sign in')}</div>
+  <div class="sm" style="text-align:center;color:var(--p1);font-weight:600">${L('نسيت كلمة المرور؟','Forgot password?')}</div>
+ </div></div>`);
+
+S.home=()=>{
+ const t=[['#126BFF','#4DA3FF','clock',L('الحضور','Attendance')],['#FF8A3D','#FFB36B','cal',L('الإجازات','Leave')],['#16A34A','#4FD08A','money',L('كشف الراتب','Payslip')],
+ ['#8B5CF6','#B79BFF','file',L('الخطابات','Letters')],['#14B8A6','#5ADBCB','id',L('المستندات','Documents')],['#EC4899','#FF8DBF','bell',L('الإشعارات','Alerts')],
+ ['#E5484D','#FF8A8E','shield',L('الأمان','Security')],['#6366F1','#9BA0FF','globe',L('اللغة','Language')],['#64748B','#94A3B8','help',L('المساعدة','Help')]];
+ return phone(L('الرئيسية','Home'),`
+ <div class="blob"></div>
+ <div class="bar on-blob"><div class="sq">${I.bell}</div><div class="sp"></div><div class="row" style="font-weight:700">LockSys HR<div class="ico" style="width:34px;height:34px;border-radius:12px;background:#fff;color:var(--p1)">${I.user}</div></div></div>
+ <div class="pad" style="color:#fff;margin-top:6px"><div class="sm" style="color:#DCEBFF">${L('صباح الخير · الجمعة 2 أكتوبر','Good morning · Fri, Oct 2')}</div><div class="h2" style="color:#fff;font-size:22px">${L('محمد أحمد الزرقاني','Mohamed El-Zorkany')}</div></div>
+ <div class="pad" style="margin-top:14px"><div class="card row" style="padding:12px">${ico(g('#16A34A','#4FD08A'),'check')}<div class="sp"><div class="h3">${L('حضرت الساعة 08:05','Checked in at 08:05')}</div><div class="sm">${L('الدلتا للأسمدة · المصنع','Delta · Factory')}</div></div><span class="chip" style="background:var(--ok-bg);color:var(--ok)">${L('في العمل','At work')}</span></div></div>
+ <div class="pad" style="margin-top:16px"><div class="h3" style="margin-bottom:10px">${L('الخدمات','Services')}</div>
+ <div class="tiles">${t.map(x=>`<div class="tile" style="background:${g(x[0],x[1])}"><div class="ic">${I[x[2]]}</div>${x[3]}</div>`).join('')}</div></div>`);
+};
+
+S.sites=()=>phone(L('التحضير','Check-in'),`
+ ${barBack(L('التحضير','Check-in'))}
+ <div class="pad"><div class="sm" style="margin:6px 4px 12px">${L('الجمعة 2 أكتوبر 2026','Friday, October 2, 2026')}</div>
+ <div class="card" style="display:grid;gap:12px"><div class="row" style="align-items:flex-start">${ico(g('#16A34A','#4FD08A'),'loc')}<div class="sp"><div class="h3">${L('شركة الدلتا للأسمدة والصناعات الكيماوية بطلخا','Talkha Delta Fertilizers')}</div><div class="sm">${L('المصنع · المركز الطبي','Factory · Medical center')}</div></div></div>
+ <div class="row" style="border-top:1px solid var(--line);padding-top:10px"><div class="sm sp">${L('لم تسجّل حضورك اليوم','You have not checked in yet')}</div><span class="chip" style="background:var(--ok-bg);color:var(--ok)">${L('تسجيل حضور','Check in')}</span></div></div>
+ <div class="card" style="display:grid;gap:12px;margin-top:12px"><div class="row" style="align-items:flex-start">${ico(g('#F59E0B','#FFC95C'),'loc')}<div class="sp"><div class="h3">${L('فرع القاهرة','Cairo branch')}</div><div class="sm">${L('المكتب الرئيسي','Head office')}</div></div></div>
+ <div class="row" style="border-top:1px solid var(--line);padding-top:10px"><div class="sm sp">${L('حضرت الساعة 08:05','Checked in at 08:05')}</div><span class="chip" style="background:var(--leave-bg);color:#B26A00">${L('تسجيل انصراف','Check out')}</span></div></div></div>`);
+
+S.site=()=>phone(L('شاشة الموقع','A site'),`
+ <div class="blob" style="height:280px"></div>${barBack(L('شركة الدلتا','Delta'),1)}
+ <div class="pad" style="margin-top:6px"><div class="hero"><small>${L('حضرت الساعة 08:05','Checked in at 08:05')}</small><div class="big" style="margin:6px 0 14px">6:12 <small style="font-size:14px">${L('ساعات العمل','hours worked')}</small></div>
+  <div class="row"><div class="fig" style="background:rgba(255,255,255,.18)"><b>08:05</b><span>${L('وقت الحضور','Check-in time')}</span></div><div class="fig" style="background:rgba(255,255,255,.18)"><b>--:--</b><span>${L('وقت الانصراف','Check-out time')}</span></div></div></div>
+  <div class="h3" style="margin:18px 4px 10px">${L('مناطق العمل','Work areas')}</div>
+  <div class="card row">${ico(g('#126BFF','#4DA3FF'),'loc')}<div class="h3">${L('المصنع','Factory')}</div></div>
+  <div class="btn" style="margin-top:18px">${L('تسجيل انصراف','Check out')}</div></div>`);
+
+S.map=()=>phone(L('الخطوة 1: الموقع','Step 1: location'),`
+ <div class="map"></div><div class="zone"></div><div class="pin"></div>
+ <div class="bar" style="position:relative">${`<div class="sq">${I.back}</div><div class="t">${L('تسجيل حضور','Check in')}</div><div style="width:40px"></div>`}</div>
+ <div class="pad" style="position:absolute;bottom:18px;inset-inline:0"><div class="card" style="display:grid;gap:12px">
+  <div class="row">${ico(g('#16A34A','#4FD08A'),'loc')}<div class="sp"><div class="h3">${L('أنت داخل المصنع','You are inside Factory')}</div><div class="sm">${L('موقعك مطابق لمنطقة العمل','Your location matches the work area')}</div></div></div>
+  <div class="btn">${L('متابعة','Continue')}</div></div></div>`);
+
+S.face=()=>phone(L('الخطوة 2: الوجه','Step 2: face'),`
+ ${barBack(L('تسجيل حضور','Check in'))}
+ <div class="pad"><div class="sm" style="text-align:center;margin:4px 0 8px">${L('الخطوة 2 من 3','Step 2 of 3')}</div>
+ <div class="cam"><div class="oval"></div><div class="arc"></div><div style="position:absolute;inset-inline-end:14px;top:150px;color:#fff;font-size:30px">›</div></div>
+ <div class="h2" style="text-align:center;margin:16px 0 10px">${L('لف رأسك لليمين','Turn your head to the right')}</div>
+ <div class="dots"><i class="on"></i><i class="on"></i><i></i></div>
+ <div class="sm" style="text-align:center;margin-top:14px">${L('تحقق مباشر. الصورة أو الشاشة لن تنفع','A live check. A photo or a screen will not work')}</div></div>`);
+
+S.month=()=>{
+ const st={P:['var(--ok-bg)','var(--ok)'],A:['var(--bad-bg)','var(--bad)'],L:['var(--leave-bg)','#B26A00'],H:['var(--hol-bg)','var(--hol)'],R:['var(--rest-bg)','var(--rest)'],M:['var(--mis-bg)','var(--mis)'],F:['var(--future)','var(--muted)'],T:['var(--surface)','var(--ink)']};
+ // Oct 2026: 1 = Thursday. Week starts Saturday.
+ const map={1:'P',2:'T'};const off=[3,9,10,16,17,23,24,30,31];
+ const cells=[];for(let i=0;i<5;i++)cells.push('');
+ for(let d=1;d<=31;d++){let k=map[d]||(d>2?'F':'P');if(d===1)k='P';if(d>2&&off.includes(d))k='R';if(d===6)k='H';if(d>2&&!off.includes(d)&&d!==6)k='F';cells.push([d,k]);}
+ const wd=lang==='ar'?['س','ح','ن','ث','ر','خ','ج']:['Sa','Su','Mo','Tu','We','Th','Fr'];
+ return phone(L('ملخص الشهر','Month summary'),`
+ ${barBack(L('ملخص الشهر','Month summary'))}
+ <div class="pad"><div class="row" style="margin:2px 0 10px"><div class="sq">${I.back}</div><div class="h2 sp" style="text-align:center">${L('أكتوبر 2026','October 2026')}</div><div class="sq" style="opacity:.35;transform:scaleX(-1)">${I.back}</div></div>
+ <div class="row" style="gap:6px;margin-bottom:6px">${[['2','present','P'],['0','absent','A'],['0','leave','L'],['1','holiday','H']].map((x,i)=>`<div class="fig" style="background:${st[x[2]][0]};color:${st[x[2]][1]}"><b>${x[0]}</b><span>${[L('حضور','Present'),L('غياب','Absent'),L('إجازة','Leave'),L('عطلة','Holiday')][i]}</span></div>`).join('')}</div>
+ <div class="row" style="gap:6px;margin-bottom:12px">${[['9',L('راحة','Rest'),'R'],['0',L('مأمورية','Mission'),'M'],['1',L('حضرت يوم راحة','Worked rest'),'P'],['20',L('ساعات','Hours'),'M']].map(x=>`<div class="fig" style="background:${st[x[2]][0]};color:${st[x[2]][1]}"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>
+ <div class="card" style="padding:10px"><div class="cal">${wd.map(w=>`<div class="wd">${w}</div>`).join('')}${cells.map(c=>c===''?'<div></div>':`<div class="d" style="background:${st[c[1]][0]};color:${st[c[1]][1]};${c[1]==='T'?'border:2px solid var(--p1)':''}">${c[0]}${c[0]===2?`<span class="star">${I.star}</span>`:''}</div>`).join('')}</div></div>
+ <div class="row" style="flex-wrap:wrap;gap:8px 12px;margin-top:12px;font-size:11px;color:var(--muted)">${[['P',L('حاضر','Present')],['A',L('غائب','Absent')],['L',L('إجازة','Leave')],['H',L('عطلة رسمية','Holiday')],['R',L('راحة','Rest')],['M',L('مأمورية','Mission')]].map(x=>`<span><i style="display:inline-block;width:12px;height:12px;border-radius:4px;background:${st[x[0]][0]};border:1px solid ${st[x[0]][1]};vertical-align:middle"></i> ${x[1]}</span>`).join('')}</div></div>`);
+};
+
+S.leave=()=>phone(L('أرصدتي','My balances'),`
+ ${barBack(L('أرصدتي','My balances'))}
+ <div class="pad" style="display:grid;gap:12px"><div class="sm" style="margin:4px 4px 0">${L('المتبقي من كل نوع إجازة','What is left of each leave type')}</div>
+ ${[[L('الإجازة السنوية','Annual leave'),'264',98,'#126BFF','#00B8D9',[['240',L('المرحّل','Carried')],['30',L('الاستحقاق','Entitlement')],['6',L('المستخدم','Used')]]],[L('الإجازة العارضة','Casual leave'),'2',29,'#FF8A3D','#FFC15E',[['7',L('الاستحقاق','Entitlement')],['5',L('المستخدم','Used')]]]].map(c=>`
+ <div class="card" style="padding:16px"><div class="row"><div class="h2 sp">${c[0]}</div><div style="background:linear-gradient(135deg,${c[3]},${c[4]});color:#fff;border-radius:14px;padding:6px 14px;text-align:center"><b style="font-size:20px">${c[1]}</b><div style="font-size:10px">${L('يوم متبقي','days left')}</div></div></div>
+ <div style="height:8px;background:var(--bg);border-radius:6px;margin:14px 0"><i style="display:block;height:100%;width:${c[2]}%;border-radius:6px;background:linear-gradient(90deg,${c[3]},${c[4]})"></i></div>
+ <div class="row">${c[5].map(f=>`<div class="fig"><b>${f[0]}</b><span class="sm">${f[1]}</span></div>`).join('')}</div></div>`).join('')}
+ <div class="btn ghost">${L('طلب إجازة','Request leave')}</div></div>`);
+
+S.account=()=>phone(L('حسابي','Account'),`
+ <div class="blob" style="height:250px"></div>${barBack(L('حسابي','Account'),1)}
+ <div class="pad" style="text-align:center;color:#fff"><div style="width:78px;height:78px;border-radius:26px;background:#fff;color:var(--p1);margin:0 auto 8px;display:grid;place-items:center;font-size:30px;font-weight:800;box-shadow:var(--shadow)">م ز</div><div class="h2" style="color:#fff">${L('محمد أحمد الزرقاني','Mohamed El-Zorkany')}</div><div class="sm" style="color:#DCEBFF">10151</div></div>
+ <div class="pad" style="margin-top:34px;display:grid;gap:12px">
+  <div class="card" style="display:grid;gap:12px">${[['id',L('الوظيفة','Job'),L('مهندس','Engineer'),'#126BFF'],['loc',L('الموقع','Site'),L('الدلتا للأسمدة','Delta'),'#16A34A'],['user',L('المدير المباشر','Manager'),L('أحمد علي','Ahmed Ali'),'#FF8A3D'],['cal',L('تاريخ التعيين','Hire date'),'15 Mar 2020','#8B5CF6']].map(r=>`<div class="row">${ico(r[3],r[0])}<div class="sp"><div class="sm">${r[1]}</div><div class="h3">${r[2]}</div></div></div>`).join('')}</div>
+  <div class="btn ghost" style="color:var(--bad)">${L('تسجيل الخروج','Sign out')}</div></div>`);
+
+function render(){
+ document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+ document.getElementById('g').innerHTML=['login','home','sites','site','map','face','month','leave','account'].map(k=>S[k]()).join('');
+}
+function bind(id,fn){document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on'));b.classList.add('on');fn(b.dataset.v)})}
+bind('gPal',v=>document.body.dataset.pal=v);bind('gCard',v=>document.body.dataset.card=v);bind('gLang',v=>{lang=v;render()});
+render();
+</script>
+</body>
+</html>

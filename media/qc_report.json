@@ -1,0 +1,55 @@
+{
+  "video_stream_identical": true,
+  "video_sha256": "SHA256=4f76ee219e5d323752bbf01204259e22c81a1a96cbe26a7f47bb29c8948bb64f",
+  "full_decode_errors": "",
+  "audio_duration_seconds": 37.013333333333335,
+  "audio_sample_rate": 48000,
+  "audio_channels": 2,
+  "sample_peak_dbfs": -5.996517960122225,
+  "clipped_samples": 0,
+  "last_100ms_rms": 3.4895798307843506e-05,
+  "timings": [
+    {
+      "line": 1,
+      "start": 0.3,
+      "end": 3.2463333333333333,
+      "tempo_factor": 1
+    },
+    {
+      "line": 2,
+      "start": 4.1,
+      "end": 10.2416875,
+      "tempo_factor": 1
+    },
+    {
+      "line": 3,
+      "start": 11.0,
+      "end": 17.441333333333333,
+      "tempo_factor": 1
+    },
+    {
+      "line": 4,
+      "start": 19.6,
+      "end": 23.965541666666667,
+      "tempo_factor": 1
+    },
+    {
+      "line": 5,
+      "start": 25.0,
+      "end": 25.91625,
+      "tempo_factor": 1
+    },
+    {
+      "line": 6,
+      "start": 26.25,
+      "end": 31.981875,
+      "tempo_factor": 1
+    },
+    {
+      "line": 7,
+      "start": 33.0,
+      "end": 36.610083333333336,
+      "tempo_factor": 1.0652835648148145
+    }
+  ]
+}

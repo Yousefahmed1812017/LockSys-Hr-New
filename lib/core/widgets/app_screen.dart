@@ -36,7 +36,11 @@ class AppBackButton extends StatelessWidget {
   }
 }
 
-/// 56px top bar: [back] title ... actions, with a 1px bottom border.
+/// 56px top bar with a 1px bottom border. On a pushed screen (back button + title)
+/// the title sits in the middle of the bar, right beside the back button, so the
+/// screen needs no big heading and the content starts higher. Without a back
+/// button the title starts at the leading edge (home).
+///   [back]   title (centered)   [actions or an empty square]
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   const AppTopBar({
     super.key,
@@ -44,6 +48,8 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBack = false,
     this.actions = const [],
     this.leading,
+    this.forceLtr = false,
+    this.flat = false,
   });
 
   final String? title;
@@ -53,43 +59,100 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   /// Replaces the title (e.g. the brand logo on the home tab).
   final Widget? leading;
 
+  /// Lay the bar out left to right in every language (the home bar: logo on the
+  /// left, notifications and account on the right, also in Arabic).
+  final bool forceLtr;
+
+  /// No fill and no line under the bar: the screen's background shows through
+  /// (the home screen).
+  final bool flat;
+
   @override
   Size get preferredSize => const Size.fromHeight(AppSizes.appBar);
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
+    final centered = showBack && leading == null && title != null;
+    final bar = Material(
+      color: flat ? Colors.transparent : Colors.white,
       child: SafeArea(
         bottom: false,
         child: Container(
           height: AppSizes.appBar,
           padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: AppColors.line)),
-          ),
-          child: Row(
-            children: [
-              if (showBack) ...[const AppBackButton(), const SizedBox(width: 10)],
-              Expanded(
-                child: leading ??
-                    Text(
-                      title ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.h3,
+          decoration: flat
+              ? null
+              : const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: AppColors.line)),
+                ),
+          child: centered
+              ? Row(
+                  children: [
+                    const AppBackButton(),
+                    Expanded(
+                      child: Text(
+                        title!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: AppText.h3,
+                      ),
                     ),
-              ),
-              ...actions,
-            ],
-          ),
+                    // Keeps the title centered: as wide as the back button.
+                    if (actions.isEmpty)
+                      const SizedBox(width: AppSizes.backButton)
+                    else
+                      ...actions,
+                  ],
+                )
+              : Row(
+                  children: [
+                    if (showBack) ...[
+                      const AppBackButton(),
+                      const SizedBox(width: 10),
+                    ],
+                    Expanded(
+                      child:
+                          leading ??
+                          Text(
+                            title ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppText.h3,
+                          ),
+                    ),
+                    ...actions,
+                  ],
+                ),
         ),
       ),
     );
+    return forceLtr
+        ? Directionality(textDirection: TextDirection.ltr, child: bar)
+        : bar;
   }
 }
 
+/// One short line under the top bar (the date, a hint, where a code was sent).
+/// Replaces the big heading: the screen's name is already in the top bar.
+class AppScreenIntro extends StatelessWidget {
+  const AppScreenIntro(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(
+      AppSpacing.gutter,
+      12,
+      AppSpacing.gutter,
+      0,
+    ),
+    child: Text(text, style: AppText.small),
+  );
+}
+
 /// Screen heading: L kicker, H1, description, short animated blue underline.
+/// No longer used by the screens (see [AppTopBar] and [AppScreenIntro]).
 /// Order is fixed: Kicker -> H1 -> description -> underline.
 class AppPageHeader extends StatelessWidget {
   const AppPageHeader({
@@ -107,7 +170,11 @@ class AppPageHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.gutter, 20, AppSpacing.gutter, 4),
+        AppSpacing.gutter,
+        20,
+        AppSpacing.gutter,
+        4,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -161,7 +228,10 @@ class AppReveal extends StatelessWidget {
       curve: Interval(delay / total, 1, curve: AppMotion.easeOut),
       builder: (context, v, child) => Opacity(
         opacity: v,
-        child: Transform.translate(offset: Offset(0, 16 * (1 - v)), child: child),
+        child: Transform.translate(
+          offset: Offset(0, 16 * (1 - v)),
+          child: child,
+        ),
       ),
       child: child,
     );
@@ -213,13 +283,13 @@ class AppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = body ??
+    Widget content =
+        body ??
         ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           children: [
-            if (heading != null)
-              AppPageHeader(title: heading!, kicker: kicker, subtitle: subtitle),
+            if (subtitle != null) AppScreenIntro(subtitle!),
             Padding(
               padding: const EdgeInsets.all(AppSpacing.gutter),
               child: Column(
@@ -227,7 +297,9 @@ class AppScreen extends StatelessWidget {
                 children: [
                   for (var i = 0; i < children.length; i++) ...[
                     if (i > 0) const SizedBox(height: AppSpacing.s4),
-                    stagger ? AppReveal(index: i, child: children[i]) : children[i],
+                    stagger
+                        ? AppReveal(index: i, child: children[i])
+                        : children[i],
                   ],
                 ],
               ),
@@ -244,7 +316,7 @@ class AppScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppTopBar(
-        title: title,
+        title: title ?? heading,
         showBack: showBack,
         actions: actions,
         leading: topBarLeading,

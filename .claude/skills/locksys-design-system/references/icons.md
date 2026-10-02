@@ -34,8 +34,10 @@ AppIcon(AppIcons.bell, size: 24, color: AppColors.blue)
 | 23–24 | Tab bar |
 | 36–56 | الرسومات التوضيحية (Empty state 36، Onboarding hub 56) |
 
-## المجموعة الحالية (33)
-`home` `users` `user` `calendar` `clock` `money` `file` `idCard` `settings` `bell` `search` `filter` `info` `warning` `location` `fingerprint` `lock` `shield` `globe` `help` `edit` `download` `inbox` `wifi` `building` `eye` `eyeOff` `forward` `back` `chevron` `plus` `check` `logout`
+## المجموعة الحالية (39)
+`home` `users` `user` `calendar` `clock` `money` `file` `idCard` `settings` `bell` `search` `filter` `info` `warning` `location` `fingerprint` `lock` `shield` `globe` `help` `edit` `download` `inbox` `wifi` `building` `eye` `eyeOff` `forward` `back` `chevron` `plus` `check` `logout` `phone` `mail` `message` `chat` `camera` `qr`
+
+`phone` `mail` `message` `chat` لقنوات رمز التحقق وحقول الدخول: الموبايل · البريد · رسالة SMS · واتساب. و`camera` `qr` لخطوات تسجيل الحضور (الصورة الشخصية ومسح رمز الفرع).
 
 اقتراحات الاستخدام: `home` الرئيسية · `users` الموظفون · `user` الحساب · `calendar` الإجازات · `clock` الحضور · `money` الرواتب · `file` المستندات/الخطابات · `idCard` البيانات الشخصية · `shield` الأمان/PDPL · `location` الفرع/الموقع · `inbox` حالة فارغة · `wifi` انقطاع الاتصال.
 
@@ -62,11 +64,13 @@ AppIcon(AppIcons.bell, size: 24, color: AppColors.blue)
 ## زر الرجوع
 `AppBackButton`: مربع 40، حد `line`، حواف 8، ظل `sh1`، أيقونة `back`. أول عنصر في `AppTopBar` بالشاشات المفتوحة بـ push.
 
-## اللوجو (`AppLogoMark`)
-- هو الـ PNG الرسمي (`assets/images/locksys-mark-{160,320,640}.png`، شفاف، نسبة 3:4). الويدجت يختار الدقة المناسبة تلقائيًا.
-- الأحجام: Top bar 30–32 · Splash 120 · Login 104.
+## اللوجو
+المصدر الرسمي SVG في `assets/brand/` (`locksys-mark.svg` علامة الـ L، و`locksys-logo.svg` اللوجو الكامل L + LockSys + SOLUTIONS). الصور بتتولّد منه (شفافة، مقصوصة على حدود الرسم) ولا تُعدَّل يدويًا.
+- **`AppLogoMark`** (علامة الـ L): `assets/images/locksys-mark-{160,320,640}.png`، نسبة 0.744. للـ Top bar (30–32) والأماكن الصغيرة. الويدجت يختار الدقة تلقائيًا.
+- **`AppLogoFull`** (اللوجو الكامل): `assets/images/locksys-logo-{600,1200}.png`، نسبة 3.5:1. للأماكن اللي العلامة فيها كبيرة: Splash (عرض 270) وشاشات ما قبل الدخول (`AppBrandHero`، عرض 240). بيحلّ محل "العلامة + اسم مكتوب" هناك.
 - **ممنوع** تعديل ألوانه أو رسمه بالكود أو وضعه على خلفية كحلية (الجزء الكحلي يختفي). للزخرفة استخدم `AppLogo` (خطوط خارجية) بشفافية 18%.
-- اسم العلامة يُكتب دائمًا "LockSys HR" بحروف لاتينية LTR.
+- لتحديث اللوجو: غيّر الـ SVG ثم صدّر الصور (حجم الـ L بعد القص نفسه، والنسبة ثابتة في `AppLogoMark.ratio` و`AppLogoFull.ratio`).
+- اسم المنتج "LockSys HR" بحروف لاتينية LTR يظل مكتوبًا في الـ Top bar وعنوان التطبيق.
 
 ## أيقونة التطبيق واسمه
 - الأيقونة: اللوجو على **خلفية بيضاء** (`assets/icon/app_icon.png` 1024) + أيقونة Android التكيّفية (`app_icon_foreground.png` بخلفية #FFFFFF). تتولّد لكل المنصات بأمر واحد: `dart run flutter_launcher_icons`.

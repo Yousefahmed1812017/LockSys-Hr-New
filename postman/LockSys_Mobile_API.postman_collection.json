@@ -1,0 +1,2108 @@
+{
+  "info": {
+    "name": "LockSys Mobile API (Semad)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Sign in (password, OTP, forgot password) and leave (my requests, balances, types) of the Semad ERP. Run the folders in order: folder 1 fills the token used by the rest. Password reset/change requests change a real password: use a test user. While EXPOSE_DEV_OTP=1 the OTP request returns devCode and otpCode is filled automatically."
+  },
+  "item": [
+    {
+      "name": "1. Login with password",
+      "item": [
+        {
+          "name": "Login (username + password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"token\",()=>pm.expect(d.token).to.have.lengthOf(64));pm.test(\"no password in user\",()=>pm.expect(JSON.stringify(d.user).toLowerCase()).to.not.include(\"password\"));pm.collectionVariables.set(\"token\",d.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/password",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\",\n  \"deviceUuid\": \"{{deviceUuid}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Wrong password -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 INVALID_CREDENTIALS\",()=>{pm.response.to.have.status(401);pm.expect(pm.response.json().error.code).to.eql(\"INVALID_CREDENTIALS\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/password",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"definitely-wrong-1\",\n  \"deviceUuid\": \"{{deviceUuid}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Missing fields -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 VALIDATION_ERROR\",()=>{pm.response.to.have.status(400);pm.expect(pm.response.json().error.code).to.eql(\"VALIDATION_ERROR\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/password",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "password"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Me (Bearer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "pm.test(\"user\",()=>pm.expect(pm.response.json().data.user.username).to.be.a(\"string\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/me",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Me without token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 TOKEN_REQUIRED\",()=>{pm.response.to.have.status(401);pm.expect(pm.response.json().error.code).to.eql(\"TOKEN_REQUIRED\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/me",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Leave - My leave requests",
+      "item": [
+        {
+          "name": "All requests (first 20)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"items + paging + summary\",()=>{pm.expect(d.items).to.be.an(\"array\");pm.expect(d.paging.total).to.be.a(\"number\");pm.expect(d.summary.total).to.be.a(\"number\");});pm.test(\"no internal fields\",()=>{const t=JSON.stringify(d).toLowerCase();pm.expect(t).to.not.include(\"created_by\");pm.expect(t).to.not.include(\"notes\");});if(d.items.length){pm.collectionVariables.set(\"requestId\",d.items[0].id);}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approved in a year, page of 5",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"limit respected\",()=>pm.expect(d.items.length).to.be.at.most(5));pm.test(\"all approved\",()=>d.items.forEach(i=>pm.expect(i.status.id).to.eql(4)));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests?state=approved&year={{year}}&limit=5&offset=0",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "approved"
+                },
+                {
+                  "key": "year",
+                  "value": "{{year}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Open requests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "pm.test(\"all open\",()=>pm.response.json().data.items.forEach(i=>pm.expect([1,2,3]).to.include(i.status.id)));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests?state=open",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "open"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Invalid state -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 VALIDATION_ERROR\",()=>{pm.response.to.have.status(400);pm.expect(pm.response.json().error.code).to.eql(\"VALIDATION_ERROR\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests?state=zzz",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "zzz"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "One request + approval chain + history",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"request + stages + history\",()=>{pm.expect(d.request.id).to.be.a(\"number\");pm.expect(d.approvalStages).to.be.an(\"array\");pm.expect(d.history).to.be.an(\"array\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests/{{requestId}}",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests",
+                "{{requestId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Someone else's / missing request -> 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"404 REQUEST_NOT_FOUND\",()=>{pm.response.to.have.status(404);pm.expect(pm.response.json().error.code).to.eql(\"REQUEST_NOT_FOUND\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests/1",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Leave - Balances and types",
+      "item": [
+        {
+          "name": "Balances of a year",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"year + years\",()=>{pm.expect(d.year).to.be.a(\"number\");pm.expect(d.years).to.be.an(\"array\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/balances?year={{year}}",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "balances"
+              ],
+              "query": [
+                {
+                  "key": "year",
+                  "value": "{{year}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Leave types I can request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "pm.test(\"items with rules\",()=>pm.response.json().data.items.forEach(t=>{pm.expect(t.id).to.be.a(\"number\");pm.expect(t.nameAr).to.be.a(\"string\");}));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/types",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "types"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Types without token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 TOKEN_REQUIRED\",()=>{pm.response.to.have.status(401);pm.expect(pm.response.json().error.code).to.eql(\"TOKEN_REQUIRED\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/types",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "types"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Preview a leave (counts days, checks rules, saves nothing)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests/preview",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests",
+                "preview"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeId\": 24,\n  \"startDate\": \"2026-12-06\",\n  \"endDate\": \"2026-12-06\",\n  \"halfDayType\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a leave request (writes a real row)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"201\",()=>{pm.response.to.have.status(201);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeId\": 24,\n  \"startDate\": \"2026-12-06\",\n  \"endDate\": \"2026-12-06\",\n  \"reason\": \"test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Annual leave without 7 days notice -> 422 ADVANCE_NOTICE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"422\",()=>{pm.response.to.have.status(422);pm.expect(pm.response.json().success).to.eql(false);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests/preview",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests",
+                "preview"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeId\": 3,\n  \"startDate\": \"2026-10-04\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Type not allowed in the app -> 422 TYPE_NOT_ALLOWED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"422\",()=>{pm.response.to.have.status(422);pm.expect(pm.response.json().success).to.eql(false);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{leaveUrl}}/requests/preview",
+              "host": [
+                "{{leaveUrl}}"
+              ],
+              "path": [
+                "requests",
+                "preview"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeId\": 5,\n  \"startDate\": \"2026-12-06\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Attendance",
+      "item": [
+        {
+          "name": "Today: my sites, work areas and state",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"state + sites\",()=>{pm.expect([\"NONE\",\"IN\",\"DONE\"]).to.include(d.state);pm.expect(d.sites).to.be.an(\"array\");pm.expect(d.methods.location).to.be.a(\"boolean\");});if(d.sites.length){pm.collectionVariables.set(\"siteId\",d.sites[0].id);const loc=d.sites[0].locations[0];if(loc){pm.collectionVariables.set(\"latitude\",loc.latitude);pm.collectionVariables.set(\"longitude\",loc.longitude);}}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/today",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "today"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Month summary (this month)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"days + summary + prev\",()=>{pm.expect(d.days).to.be.an(\"array\");pm.expect(d.summary).to.be.an(\"object\");pm.expect(d.next).to.eql(null);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/month",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "month"
+              ],
+              "query": []
+            }
+          }
+        },
+        {
+          "name": "Month summary (a month, day by day)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.test(\"every day has a known status\",()=>d.days.forEach(x=>pm.expect([\"PRESENT\",\"ABSENT\",\"OFF\",\"LEAVE\",\"MISSION\",\"TODAY\",\"FUTURE\"]).to.include(x.status)));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/month?month={{month}}",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "month"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "{{month}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Future month -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 VALIDATION_ERROR\",()=>{pm.response.to.have.status(400);pm.expect(pm.response.json().error.code).to.eql(\"VALIDATION_ERROR\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/month?month=2099-01",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "month"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "{{month}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Check in / out (the server decides which; writes a real row)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"201 or a clear refusal\",()=>{pm.expect([201,403,409]).to.include(pm.response.code);});pm.test(\"201 has the time\",()=>{if(pm.response.code===201){pm.expect(pm.response.json().data.time).to.match(/^\\d\\d:\\d\\d$/);}});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/check",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "check"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteId\": \"{{siteId}}\",\n  \"latitude\": \"{{latitude}}\",\n  \"longitude\": \"{{longitude}}\",\n  \"accuracyMeters\": 10,\n  \"faceVerified\": true,\n  \"isMockLocation\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Fake location -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"refused\",()=>{pm.expect([403,409]).to.include(pm.response.code);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/check",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "check"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteId\": \"{{siteId}}\",\n  \"latitude\": \"{{latitude}}\",\n  \"longitude\": \"{{longitude}}\",\n  \"faceVerified\": true,\n  \"isMockLocation\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Without coordinates -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"refused\",()=>{pm.expect([400,403,409]).to.include(pm.response.code);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/check",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "check"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteId\": \"{{siteId}}\",\n  \"faceVerified\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Today without token -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 TOKEN_REQUIRED\",()=>{pm.response.to.have.status(401);pm.expect(pm.response.json().error.code).to.eql(\"TOKEN_REQUIRED\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{attendanceUrl}}/today",
+              "host": [
+                "{{attendanceUrl}}"
+              ],
+              "path": [
+                "today"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Login with OTP",
+      "item": [
+        {
+          "name": "Request OTP (phone + SMS)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.collectionVariables.set(\"otpId\",d.otpId);if(d.devCode){pm.collectionVariables.set(\"otpCode\",d.devCode);}pm.test(\"masked\",()=>pm.expect(d.destinationMasked).to.be.a(\"string\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/otp/request",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "otp",
+                "request"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifierType\": \"phone\",\n  \"identifier\": \"{{phone}}\",\n  \"channel\": \"sms\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Request OTP (email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.collectionVariables.set(\"otpId\",d.otpId);if(d.devCode){pm.collectionVariables.set(\"otpCode\",d.devCode);}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/otp/request",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "otp",
+                "request"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifierType\": \"email\",\n  \"identifier\": \"{{email}}\",\n  \"channel\": \"email\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Verify OTP -> token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "pm.collectionVariables.set(\"token\",pm.response.json().data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/otp/verify",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "otp",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otpId\": \"{{otpId}}\",\n  \"code\": \"{{otpCode}}\",\n  \"deviceUuid\": \"{{deviceUuid}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Wrong code -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400\",()=>pm.response.to.have.status(400));pm.test(\"error code\",()=>pm.expect([\"INVALID_OTP\",\"OTP_ATTEMPTS_EXCEEDED\"]).to.include(pm.response.json().error.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/login/otp/verify",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "login",
+                "otp",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otpId\": \"{{otpId}}\",\n  \"code\": \"000000\",\n  \"deviceUuid\": \"{{deviceUuid}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Forgot password",
+      "item": [
+        {
+          "name": "Request reset code (phone/email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "const d=pm.response.json().data;pm.collectionVariables.set(\"otpId\",d.otpId);if(d.devCode){pm.collectionVariables.set(\"otpCode\",d.devCode);}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/password/forgot/request",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "password",
+                "forgot",
+                "request"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifierType\": \"phone\",\n  \"identifier\": \"{{phone}}\",\n  \"channel\": \"sms\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Verify reset code -> resetToken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});",
+                  "pm.collectionVariables.set(\"resetToken\",pm.response.json().data.resetToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/password/forgot/verify",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "password",
+                "forgot",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otpId\": \"{{otpId}}\",\n  \"code\": \"{{otpCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reset password (CHANGES the real password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/password/reset",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "password",
+                "reset"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resetToken\": \"{{resetToken}}\",\n  \"newPassword\": \"{{newPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reset with bad token -> 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"400 INVALID_RESET_TOKEN\",()=>{pm.response.to.have.status(400);pm.expect(pm.response.json().error.code).to.eql(\"INVALID_RESET_TOKEN\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/password/reset",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "password",
+                "reset"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resetToken\": \"nope\",\n  \"newPassword\": \"abcdef\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Signed in",
+      "item": [
+        {
+          "name": "Change password (CHANGES the real password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/password/change",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "password",
+                "change"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"{{password}}\",\n  \"newPassword\": \"{{newPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 + success\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/logout",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Me after logout -> 401",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 TOKEN_INVALID\",()=>{pm.response.to.have.status(401);pm.expect(pm.response.json().error.code).to.eql(\"TOKEN_INVALID\");});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{authUrl}}/me",
+              "host": [
+                "{{authUrl}}"
+              ],
+              "path": [
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Approvals (the signed-in employee decides)",
+      "item": [
+        {
+          "name": "Waiting for me",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items?tab=waiting",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "tab",
+                  "value": "waiting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Later (an earlier stage must decide first)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items?tab=later",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "tab",
+                  "value": "later"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Done",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items?tab=done",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "tab",
+                  "value": "done"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "One request + chain",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items/110144",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items",
+                "110144"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve (writes; needs the earlier stages done) -> 200 or 409 WAIT_PREVIOUS",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200\",()=>{pm.response.to.have.status(200);pm.expect(pm.response.json().success).to.eql(true);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items/110144/approve",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items",
+                "110144",
+                "approve"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"ok\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reject without a reason -> 422 NOTES_REQUIRED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"422\",()=>{pm.response.to.have.status(422);pm.expect(pm.response.json().success).to.eql(false);});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "LockSysHR/1.0"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{approvalsUrl}}/items/110144/reject",
+              "host": [
+                "{{approvalsUrl}}"
+              ],
+              "path": [
+                "items",
+                "110144",
+                "reject"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "authUrl",
+      "value": "https://semaderp.locksys.co/ords/locksysapp/mobile/auth/v1"
+    },
+    {
+      "key": "leaveUrl",
+      "value": "https://semaderp.locksys.co/ords/locksysapp/mobile/leave/v1"
+    },
+    {
+      "key": "username",
+      "value": "admin"
+    },
+    {
+      "key": "password",
+      "value": "123456"
+    },
+    {
+      "key": "deviceUuid",
+      "value": "postman-test-device"
+    },
+    {
+      "key": "phone",
+      "value": "01275002379"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "year",
+      "value": "2026"
+    },
+    {
+      "key": "otpId",
+      "value": ""
+    },
+    {
+      "key": "otpCode",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "requestId",
+      "value": ""
+    },
+    {
+      "key": "resetToken",
+      "value": ""
+    },
+    {
+      "key": "newPassword",
+      "value": ""
+    },
+    {
+      "key": "attendanceUrl",
+      "value": "https://semaderp.locksys.co/ords/locksysapp/mobile/attendance/v1"
+    },
+    {
+      "key": "siteId",
+      "value": ""
+    },
+    {
+      "key": "latitude",
+      "value": ""
+    },
+    {
+      "key": "longitude",
+      "value": ""
+    },
+    {
+      "key": "month",
+      "value": "2026-09"
+    },
+    {
+      "key": "approvalsUrl",
+      "value": "https://semaderp.locksys.co/ords/locksysapp/mobile/approvals/v1"
+    }
+  ]
+}

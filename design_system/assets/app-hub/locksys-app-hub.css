@@ -1,0 +1,476 @@
+/* ==========================================================================
+   LockSys App Hub - global theme for Oracle APEX (Universal Theme / Redwood)
+   Same identity as the LockSys HR mobile app: white surfaces, LockSys navy and
+   blue, 8px squares, one font for Arabic + English (IBM Plex Sans Arabic).
+
+   Use: Shared Components > Static Application Files > upload this file, then
+   User Interface Attributes > Cascading Style Sheet > File URLs:
+       #APP_FILES#locksys-app-hub.css
+   (Do not add #MIN#: it looks for a locksys-app-hub.min.css that does not exist.)
+   Works in RTL (Arabic) and LTR (English): logical properties only.
+   Numbers/codes: add the CSS class  ls-mono  to keep them left-to-right.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap");
+
+/* 1. Tokens (mirror lib/core/theme/app_colors.dart and app_tokens.dart) ------ */
+:root {
+  --ls-navy: #071f3d;
+  --ls-navy-2: #0c2b53;
+  --ls-navy-3: #123a6b;
+  --ls-blue: #126bff;
+  --ls-blue-bright: #168bff;
+  --ls-blue-pressed: #0a5ce6;
+  --ls-white: #ffffff;
+  --ls-blue-50: #f5faff;
+  --ls-blue-light: #eaf4ff;
+  --ls-muted-bg: #eef2f7;
+  --ls-text: #071f3d;
+  --ls-muted: #536477;
+  --ls-hint: #8fa1b6;
+  --ls-line: #dce7f3;
+  --ls-line-strong: #bfd3ea;
+  --ls-success: #1f7a4d;
+  --ls-success-bg: #e8f6ee;
+  --ls-warning: #b26a00;
+  --ls-warning-bg: #fff4e0;
+  --ls-danger: #c62828;
+  --ls-danger-bg: #fdecec;
+  --ls-radius: 8px;
+  --ls-radius-dialog: 12px;
+  --ls-font: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, system-ui, -apple-system, Arial, sans-serif;
+  --ls-mono: Consolas, "Courier New", monospace;
+  --ls-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ls-ring: 0 0 0 3px rgba(18, 107, 255, 0.18);
+
+  /* Universal Theme variables (ignored by versions that do not use them). */
+  --ut-palette-primary: var(--ls-blue);
+  --ut-palette-primary-contrast: var(--ls-white);
+  --ut-palette-primary-shade: var(--ls-blue-pressed);
+  --ut-palette-primary-tint: var(--ls-blue-light);
+  --ut-body-background-color: var(--ls-white);
+  --ut-body-text-color: var(--ls-text);
+  --ut-body-font-family: var(--ls-font);
+  --ut-component-border-radius: var(--ls-radius);
+  --ut-component-border-color: var(--ls-line);
+  --ut-focus-outline-color: var(--ls-blue);
+
+  /* Redwood variables (ignored by versions that do not use them). */
+  --a-palette-primary: var(--ls-blue);
+  --a-palette-primary-contrast: var(--ls-white);
+  --a-base-font-family: var(--ls-font);
+  --a-base-text-color: var(--ls-text);
+  --a-base-background-color: var(--ls-white);
+  --a-border-radius: var(--ls-radius);
+}
+
+/* 2. Font everywhere (form controls and icons excluded from inheritance) ------ */
+html,
+body,
+.t-Body,
+.t-Body-title,
+.t-Body-nav,
+.t-Header,
+.t-Dialog,
+.ui-dialog,
+.ui-widget,
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button,
+input,
+select,
+textarea,
+button,
+.t-Button,
+.a-Button,
+.apex-item-text,
+.apex-item-select,
+.apex-item-textarea,
+.a-IRR,
+.a-IG,
+.a-GV,
+.t-Report,
+.t-Region,
+.t-Form-label,
+.a-Menu,
+.a-MenuBar,
+.t-Alert,
+.t-Badge {
+  font-family: var(--ls-font);
+}
+
+/* Icons are deliberately NOT in the list above: APEX icon fonts keep their own
+   family, so nothing here can turn an icon into a missing-glyph box. */
+
+body,
+.t-Body {
+  background: var(--ls-white);
+  color: var(--ls-text);
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6,
+.t-Body-title h1,
+.t-Region-title,
+.t-Card-title {
+  color: var(--ls-navy);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { font-size: 17px; font-weight: 600; }
+small, .t-Form-helpText, .u-textMuted { color: var(--ls-muted); font-size: 13px; }
+
+a { color: var(--ls-blue); }
+a:hover, a:focus { color: var(--ls-blue-pressed); }
+
+/* Codes, times, dates, IDs: always left-to-right with tabular figures. */
+.ls-mono,
+code,
+.u-code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-family: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--ls-navy);
+}
+
+/* 3. Header and navigation: white, navy text (the logo must not sit on dark) - */
+.t-Header {
+  background: var(--ls-white);
+  border-block-end: 1px solid var(--ls-line);
+  box-shadow: 0 1px 2px rgba(7, 31, 61, 0.06);
+}
+.t-Header-logo-link,
+.t-Header-logo .t-Header-logo-link {
+  color: var(--ls-navy);
+  font-weight: 700;
+}
+.t-Header-logo-graphic { max-block-size: 40px; }
+.t-Header .t-Button--header,
+.t-Header .t-Button--navBar,
+.t-Header .a-Menu-label,
+.t-Header .t-NavigationBar-item .t-Button {
+  color: var(--ls-navy);
+}
+.t-Header .t-Button--header:hover,
+.t-Header .t-Button--navBar:hover {
+  background: var(--ls-blue-light);
+  color: var(--ls-blue);
+}
+
+.t-Body-nav,
+.t-TreeNav {
+  background: var(--ls-blue-50);
+  border-inline-end: 1px solid var(--ls-line);
+}
+.t-TreeNav .a-TreeView-content,
+.t-TreeNav .a-TreeView-label {
+  color: var(--ls-navy);
+  border-radius: var(--ls-radius);
+}
+.t-TreeNav .a-TreeView-content:hover { background: var(--ls-blue-light); }
+.t-TreeNav .a-TreeView-content.is-current,
+.t-TreeNav .is-current > .a-TreeView-content {
+  background: var(--ls-blue-light);
+  color: var(--ls-blue);
+  font-weight: 600;
+}
+
+/* 4. Regions and cards ------------------------------------------------------- */
+.t-Region,
+.t-Card,
+.t-CardsRegion .t-Card,
+.a-CardView-item {
+  background: var(--ls-white);
+  border: 1px solid var(--ls-line);
+  border-radius: var(--ls-radius);
+  box-shadow: 0 1px 2px rgba(7, 31, 61, 0.06);
+}
+.t-Region-header {
+  background: var(--ls-blue-50);
+  border-block-end: 1px solid var(--ls-line);
+  border-start-start-radius: var(--ls-radius);
+  border-start-end-radius: var(--ls-radius);
+}
+.t-Region--noBorder,
+.t-Region--removeHeader { box-shadow: none; }
+
+/* 5. Buttons: 8px, blue primary, navy on hover of the secondary ---------------- */
+.t-Button,
+.a-Button,
+.ui-button {
+  border-radius: var(--ls-radius);
+  font-weight: 600;
+  font-size: 15px;
+  min-block-size: 40px;
+  padding-inline: 16px;
+  border: 1px solid var(--ls-line-strong);
+  background: var(--ls-white);
+  color: var(--ls-navy);
+  box-shadow: none;
+  transition: background-color 150ms var(--ls-ease), border-color 150ms var(--ls-ease),
+              color 150ms var(--ls-ease), box-shadow 150ms var(--ls-ease);
+}
+.t-Button:hover,
+.a-Button:hover {
+  background: var(--ls-blue-light);
+  border-color: var(--ls-blue);
+  color: var(--ls-blue);
+}
+.t-Button--hot,
+.t-Button--primary,
+.a-Button--hot {
+  background: var(--ls-blue);
+  border-color: var(--ls-blue);
+  color: var(--ls-white);
+}
+.t-Button--hot:hover,
+.t-Button--primary:hover,
+.a-Button--hot:hover {
+  background: var(--ls-blue-pressed);
+  border-color: var(--ls-blue-pressed);
+  color: var(--ls-white);
+}
+.t-Button--danger,
+.t-Button--warning {
+  background: var(--ls-danger);
+  border-color: var(--ls-danger);
+  color: var(--ls-white);
+}
+.t-Button--danger:hover { background: #a61f1f; border-color: #a61f1f; color: var(--ls-white); }
+.t-Button--simple,
+.t-Button--noUI {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ls-blue);
+}
+.t-Button:focus-visible,
+.a-Button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--ls-ring);
+}
+.t-Button.is-disabled,
+.t-Button:disabled,
+.a-Button.is-disabled,
+.a-Button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 6. Form fields ------------------------------------------------------------- */
+.t-Form-label,
+.a-Form-label {
+  color: var(--ls-navy);
+  font-size: 13px;
+  font-weight: 600;
+}
+.t-Form-required,
+.is-required .t-Form-label::after { color: var(--ls-danger); }
+
+.apex-item-text,
+.apex-item-select,
+.apex-item-textarea,
+.apex-item-popup-lov,
+.apex-item-datepicker,
+.apex-item-password,
+.apex-item-number,
+select.selectlist,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+  border: 1px solid var(--ls-line-strong);
+  border-radius: var(--ls-radius);
+  background: var(--ls-white);
+  color: var(--ls-navy);
+  font-size: 15px;
+  min-block-size: 44px;
+  padding-inline: 12px;
+  transition: border-color 150ms var(--ls-ease), box-shadow 150ms var(--ls-ease);
+}
+.apex-item-text::placeholder,
+.apex-item-textarea::placeholder,
+input::placeholder,
+textarea::placeholder { color: var(--ls-hint); }
+
+.apex-item-text:hover,
+.apex-item-select:hover,
+.apex-item-textarea:hover { border-color: var(--ls-blue); }
+.apex-item-text:focus,
+.apex-item-select:focus,
+.apex-item-textarea:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ls-blue);
+  box-shadow: var(--ls-ring);
+  outline: none;
+}
+.apex-item-text[readonly],
+.apex-item-text:disabled,
+.is-disabled .apex-item-text {
+  background: var(--ls-muted-bg);
+  color: var(--ls-muted);
+}
+.t-Form-fieldContainer.is-error .apex-item-text,
+.t-Form-fieldContainer.has-error .apex-item-text,
+.apex-page-item-error input { border-color: var(--ls-danger); }
+.t-Form-error { color: var(--ls-danger); font-size: 13px; }
+
+/* Switch and checkbox/radio share the brand blue. */
+input[type="checkbox"],
+input[type="radio"] { accent-color: var(--ls-blue); }
+.a-Switch-input:checked + .a-Switch-toggle,
+.apex-item-switch input:checked + span { background: var(--ls-blue); border-color: var(--ls-blue); }
+
+/* 7. Reports, Interactive Report / Grid, tree --------------------------------- */
+.t-Report-report th,
+.t-Report-colHead,
+.a-IRR-header,
+.a-GV-header,
+.a-IG .a-GV-headerLabel {
+  background: var(--ls-blue-50);
+  color: var(--ls-navy);
+  font-size: 13px;
+  font-weight: 600;
+  border-color: var(--ls-line);
+}
+.t-Report-report td,
+.a-IRR-table td,
+.a-GV-cell {
+  color: var(--ls-navy);
+  border-color: var(--ls-line);
+}
+.t-Report-report tr:hover td,
+.a-IRR-table tr:hover td,
+.a-GV-row:hover .a-GV-cell { background: var(--ls-blue-50); }
+.a-GV-row.is-selected .a-GV-cell,
+.a-IRR-table tr.is-selected td { background: var(--ls-blue-light); }
+.a-IRR-container,
+.a-IG,
+.a-GV { border-radius: var(--ls-radius); }
+
+/* Feature tree: node text stays readable, selection uses the brand tint. */
+.a-TreeView-content { border-radius: var(--ls-radius); }
+.a-TreeView-content.is-selected,
+.a-TreeView-content.is-current {
+  background: var(--ls-blue-light);
+  color: var(--ls-blue);
+  font-weight: 600;
+}
+.a-TreeView-toggle { color: var(--ls-muted); }
+/* Sub features indent on the reading side in both RTL and LTR. */
+.a-TreeView-node .a-TreeView-node { padding-inline-start: 8px; }
+
+/* 8. Badges, status pills, alerts, notification messages ---------------------- */
+.t-Badge,
+.a-Badge,
+.u-badge {
+  border-radius: var(--ls-radius);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: var(--ls-blue-light);
+  color: var(--ls-blue);
+}
+.u-badge--success, .t-Badge--success { background: var(--ls-success-bg); color: var(--ls-success); }
+.u-badge--warning, .t-Badge--warning { background: var(--ls-warning-bg); color: var(--ls-warning); }
+.u-badge--danger,  .t-Badge--danger  { background: var(--ls-danger-bg);  color: var(--ls-danger); }
+.u-badge--muted,   .t-Badge--muted   { background: var(--ls-muted-bg);   color: var(--ls-muted); }
+
+.t-Alert,
+.t-Alert--wizard,
+.t-Body-alert .t-Alert {
+  border-radius: var(--ls-radius);
+  border: 1px solid var(--ls-line);
+  box-shadow: none;
+}
+.t-Alert--success { background: var(--ls-success-bg); border-color: var(--ls-success); color: var(--ls-success); }
+.t-Alert--warning { background: var(--ls-warning-bg); border-color: var(--ls-warning); color: var(--ls-warning); }
+.t-Alert--danger,
+.t-Alert--error   { background: var(--ls-danger-bg);  border-color: var(--ls-danger);  color: var(--ls-danger); }
+.t-Alert--info    { background: var(--ls-blue-light); border-color: var(--ls-blue);    color: var(--ls-navy); }
+.t-Alert .t-Alert-title,
+.t-Alert .t-Alert-body { color: inherit; }
+
+/* 9. Dialogs, menus, tabs, breadcrumbs, pagination ---------------------------- */
+.ui-dialog,
+.t-Dialog,
+.t-DialogRegion,
+.a-Menu-content,
+.ui-menu {
+  border-radius: var(--ls-radius-dialog);
+  border: 1px solid var(--ls-line);
+  box-shadow: 0 10px 24px -14px rgba(7, 31, 61, 0.25);
+}
+.ui-dialog .ui-dialog-titlebar {
+  background: var(--ls-blue-50);
+  border-block-end: 1px solid var(--ls-line);
+  border-start-start-radius: var(--ls-radius-dialog);
+  border-start-end-radius: var(--ls-radius-dialog);
+  color: var(--ls-navy);
+  font-weight: 700;
+}
+.ui-widget-overlay { background: rgba(7, 31, 61, 0.45); opacity: 1; }
+.a-Menu-item.is-focused > .a-Menu-inner,
+.a-Menu-item:hover > .a-Menu-inner { background: var(--ls-blue-light); color: var(--ls-blue); }
+
+.t-TabsRegion-items .t-Tabs-link,
+.a-Tabs-tab,
+.apex-rds-item a { color: var(--ls-muted); font-weight: 600; }
+.t-TabsRegion-items .is-active .t-Tabs-link,
+.a-Tabs-tab.is-active,
+.apex-rds-item.apex-rds-selected a {
+  color: var(--ls-blue);
+  border-block-end: 2px solid var(--ls-blue);
+}
+.t-Breadcrumb-label,
+.t-Breadcrumb-item a { color: var(--ls-muted); }
+.t-Breadcrumb-item.is-active .t-Breadcrumb-label { color: var(--ls-navy); font-weight: 600; }
+.t-Report-paginationLink,
+.a-IRR-pagination-label { color: var(--ls-blue); }
+
+/* 10. Login page ------------------------------------------------------------- */
+.t-Login-container,
+.t-Login-region {
+  background: var(--ls-white);
+  border: 1px solid var(--ls-line);
+  border-radius: var(--ls-radius-dialog);
+  box-shadow: 0 10px 24px -14px rgba(7, 31, 61, 0.25);
+}
+.t-Login-title { color: var(--ls-navy); font-size: 24px; font-weight: 700; }
+.t-Login-logo { max-inline-size: 220px; }
+body.t-PageBody--login,
+body.t-PageBody--login .t-Body {
+  background: linear-gradient(180deg, var(--ls-blue-50) 0%, var(--ls-white) 60%);
+}
+
+/* 11. RTL refinements (Arabic): APEX sets dir="rtl" on <html> ----------------- */
+html[dir="rtl"] body,
+html[dir="rtl"] .t-Body { text-align: start; }
+html[dir="rtl"] input[type="number"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] input[type="email"] { direction: ltr; text-align: end; }
+html[dir="rtl"] .a-Icon.icon-chevron-right:before,
+html[dir="rtl"] .fa-chevron-right:before { display: inline-block; transform: scaleX(-1); }
+
+/* 12. Motion: respect reduced-motion ----------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

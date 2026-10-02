@@ -5,7 +5,7 @@ import '../../core/l10n/locale_controller.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text.dart';
 import '../../core/theme/app_tokens.dart';
-import '../../core/widgets/app_logo_mark.dart';
+import '../../core/widgets/app_logo_full.dart';
 import '../../core/widgets/l_pattern.dart';
 
 /// Splash: white screen with the faded L pattern. The real LockSys mark
@@ -27,8 +27,10 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: AppMotion.splash);
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: AppMotion.splash,
+  );
   late final Animation<double> _logo = CurvedAnimation(
     parent: _c,
     curve: const Interval(.05, .42, curve: AppMotion.easeOut),
@@ -91,11 +93,11 @@ class _SplashPageState extends State<SplashPage>
                           begin: const Offset(0, .08),
                           end: Offset.zero,
                         ).animate(_logo),
-                        child: const AppLogoMark(height: 120),
+                        child: const AppLogoFull(width: 270),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
                   FadeTransition(
                     opacity: _name,
                     child: SlideTransition(
@@ -103,26 +105,13 @@ class _SplashPageState extends State<SplashPage>
                         begin: const Offset(0, .3),
                         end: Offset.zero,
                       ).animate(_name),
-                      child: Column(
-                        children: [
-                          Text(
-                            'LockSys HR',
-                            textDirection: TextDirection.ltr,
-                            style: AppText.h1.copyWith(
-                              fontSize: 30,
-                              height: 1.1,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l.splashTagline,
-                            style: AppText.xs.copyWith(
-                              fontSize: 11,
-                              // letter-spacing breaks Arabic letter joining
-                              letterSpacing: arabic ? 0 : 3.5,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        l.splashTagline,
+                        style: AppText.xs.copyWith(
+                          fontSize: 11,
+                          // letter-spacing breaks Arabic letter joining
+                          letterSpacing: arabic ? 0 : 3.5,
+                        ),
                       ),
                     ),
                   ),

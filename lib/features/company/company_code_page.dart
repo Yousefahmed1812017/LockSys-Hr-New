@@ -18,6 +18,7 @@ import '../../core/widgets/l_pattern.dart';
 import '../../l10n/app_localizations.dart';
 import 'company.dart';
 import 'company_registry.dart';
+import 'api_company_registry.dart';
 
 enum _Phase { idle, checking, found }
 
@@ -46,6 +47,7 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
   Company? _company;
   bool _invalid = false;
   bool _network = false;
+  CompanyApiException? _apiError;
 
   @override
   void dispose() {
@@ -54,17 +56,19 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
   }
 
   void _reset() => setState(() {
-        _phase = _Phase.idle;
-        _company = null;
-        _invalid = false;
-        _network = false;
-      });
+    _phase = _Phase.idle;
+    _company = null;
+    _invalid = false;
+    _network = false;
+    _apiError = null;
+  });
 
   Future<void> _verify() async {
     FocusScope.of(context).unfocus();
     setState(() {
       _invalid = false;
       _network = false;
+      _apiError = null;
     });
     if (!_form.currentState!.validate()) return;
     setState(() => _phase = _Phase.checking);
@@ -82,6 +86,12 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
         _invalid = true;
       });
       _form.currentState!.validate();
+    } on CompanyApiException catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _phase = _Phase.idle;
+        _apiError = error;
+      });
     } catch (_) {
       if (!mounted) return;
       setState(() {
@@ -92,10 +102,11 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
   }
 
   String _featureLabel(AppLocalizations l, AppFeature f) => switch (f) {
-        AppFeature.attendance => l.navAttendance,
-        AppFeature.leave => l.navLeave,
-        AppFeature.payslip => l.payslip,
-      };
+    AppFeature.attendance => l.navAttendance,
+    AppFeature.leave => l.navLeave,
+    AppFeature.payslip => l.payslip,
+    _ => f.key, // only modules are listed; see AppFeature.modules
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +171,8 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
                           onChanged: (_) {
                             if (_phase == _Phase.found ||
                                 _invalid ||
-                                _network) {
+                                _network ||
+                                _apiError != null) {
                               _reset();
                             }
                           },
@@ -201,20 +213,29 @@ class _CompanyCodePageState extends State<CompanyCodePage> {
                                     featureLabel: (f) => _featureLabel(l, f),
                                   ),
                                 )
-                              : _network
-                                  ? Padding(
-                                      key: const ValueKey('network'),
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: AppAlert(
-                                        title: l.offlineTitle,
-                                        message: l.companyErrNetwork,
-                                        tone: AppTone.danger,
-                                      ),
-                                    )
-                                  : const SizedBox(
-                                      key: ValueKey('none'),
-                                      width: double.infinity,
-                                    ),
+                              : _network || _apiError != null
+                              ? Padding(
+                                  key: const ValueKey('network'),
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: AppAlert(
+                                    title: _apiError == null
+                                        ? l.offlineTitle
+                                        : l.companyTitle,
+                                    message: _apiError == null
+                                        ? l.companyErrNetwork
+                                        : Localizations.localeOf(
+                                                context,
+                                              ).languageCode ==
+                                              'ar'
+                                        ? _apiError!.arabicMessage
+                                        : _apiError!.message,
+                                    tone: AppTone.danger,
+                                  ),
+                                )
+                              : const SizedBox(
+                                  key: ValueKey('none'),
+                                  width: double.infinity,
+                                ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -276,7 +297,9 @@ class _FoundCard extends StatelessWidget {
                   children: [
                     Text(l.companyFound, style: AppText.xs),
                     Text(
-                      company.name,
+                      company.nameFor(
+                        Localizations.localeOf(context).languageCode,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppText.h3,
@@ -293,7 +316,7 @@ class _FoundCard extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final f in AppFeature.values)
+              for (final f in AppFeature.modules)
                 if (company.has(f)) AppBadge(featureLabel(f)),
             ],
           ),
@@ -357,6 +380,5 @@ class _UpperCaseFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
-  ) =>
-      newValue.copyWith(text: newValue.text.toUpperCase());
+  ) => newValue.copyWith(text: newValue.text.toUpperCase());
 }

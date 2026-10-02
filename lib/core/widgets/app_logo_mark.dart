@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
-/// The official LockSys "L" mark (gradient navy + blue, transparent PNG).
-/// Use this for splash, login, top bar and any branding spot. Never redraw
-/// or recolor it. Ratio is 3:4 (width:height).
+/// The official LockSys "L" mark (gradient navy + blue, transparent PNG exported
+/// from assets/brand/locksys-mark.svg). Use it for the top bar and small
+/// branding spots; the full logo with the name is [AppLogoFull]. Never redraw
+/// or recolor it.
 ///
 /// The vector [AppLogo] (l_pattern.dart) is only for decorative outline art.
 class AppLogoMark extends StatelessWidget {
   const AppLogoMark({super.key, this.height = 96});
 
   final double height;
+
+  /// width / height of the exported mark.
+  static const ratio = 119 / 160;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class AppLogoMark extends StatelessWidget {
       child: Image.asset(
         asset,
         height: height,
-        width: height * 3 / 4,
+        width: height * ratio,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.high,
         excludeFromSemantics: true,

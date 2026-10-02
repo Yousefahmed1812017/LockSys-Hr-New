@@ -18,6 +18,8 @@ class AppLanguageToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A single-language company has nothing to switch to.
+    if (!LocaleScope.of(context).canSwitch) return const SizedBox.shrink();
     final l = context.l10n;
     final fg = onDark ? Colors.white : AppColors.navy;
     return Pressable(

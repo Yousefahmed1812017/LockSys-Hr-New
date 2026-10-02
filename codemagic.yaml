@@ -1,0 +1,61 @@
+# Codemagic: builds the iOS app and sends it to TestFlight. No Mac needed.
+#
+# One-time setup in Codemagic (codemagic.io -> Teams -> Integrations):
+#   1. App Store Connect integration: add the API key made in App Store Connect
+#      (Users and Access -> Integrations -> App Store Connect API), name it
+#      "locksys_asc" (or change the name below).
+#   2. Environment variables, group "locksys" (mark them secure):
+#        MAPS_API_KEY    Google Maps key for iOS (enable "Maps SDK for iOS")
+#        API_USER        company directory API user
+#        API_PASSWORD    company directory API password
+#        APP_STORE_APPLE_ID  the app's numeric Apple ID (App Store Connect -> App Information)
+# In App Store Connect create the app with the bundle id below first.
+workflows:
+  ios-testflight:
+    name: iOS to TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: locksys_asc
+    environment:
+      groups:
+        - locksys
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: co.locksys.hr
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Secrets that are not in git
+        script: |
+          # The company directory credentials (git-ignored file the app imports)
+          cat > lib/core/config/local_secrets.dart <<EOF
+          const localApiUser = '$API_USER';
+          const localApiPassword = '$API_PASSWORD';
+          EOF
+          # The Google Maps key goes into the iOS build settings (Info.plist reads it)
+          echo "MAPS_API_KEY=$MAPS_API_KEY" >> ios/Flutter/Release.xcconfig
+      - name: Packages
+        script: flutter pub get
+      - name: Pods
+        script: |
+          cd ios
+          pod install
+      - name: Signing
+        script: xcode-project use-profiles
+      - name: Build number from TestFlight
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          echo "BUILD_NUMBER=$((LATEST + 1))" >> $CM_ENV
+      - name: Build the ipa
+        script: |
+          flutter build ipa --release \
+            --build-number=$BUILD_NUMBER \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

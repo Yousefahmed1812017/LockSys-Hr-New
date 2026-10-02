@@ -107,5 +107,556 @@
         "type": "String"
       }
     }
-  }
+  },
+  "loginMethodUsername": "اسم المستخدم",
+  "loginMethodPhone": "الموبايل",
+  "loginMethodEmail": "البريد",
+  "phoneNumber": "رقم الموبايل",
+  "phoneHint": "+20 10 1234 5678",
+  "phoneHelper": "أدخل الرقم مع رمز الدولة.",
+  "emailAddress": "البريد الإلكتروني",
+  "emailHint": "name@company.com",
+  "errPhoneRequired": "أدخل رقم الموبايل",
+  "errPhoneInvalid": "رقم الموبايل غير صحيح",
+  "errEmailRequired": "أدخل البريد الإلكتروني",
+  "errEmailInvalid": "البريد الإلكتروني غير صحيح",
+  "sendCode": "إرسال رمز التحقق",
+  "chooseCodeChannel": "كيف تريد استلام الرمز؟",
+  "channelSms": "رسالة نصية SMS",
+  "channelWhatsapp": "واتساب",
+  "channelEmail": "البريد الإلكتروني",
+  "viaSms": "رسالة نصية",
+  "viaWhatsapp": "واتساب",
+  "viaEmail": "البريد الإلكتروني",
+  "registeredPhone": "رقم الموبايل المسجّل في حسابك",
+  "registeredEmail": "البريد المسجّل في حسابك",
+  "otpKicker": "التحقق",
+  "otpTitle": "أدخل رمز التحقق",
+  "otpSubtitle": "أرسلنا رمزًا من 6 أرقام عبر {channel} إلى {destination}.",
+  "@otpSubtitle": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "otpVerify": "تحقق",
+  "errOtpIncomplete": "أدخل الرمز المكوّن من 6 أرقام",
+  "otpDidntGet": "لم يصلك الرمز؟",
+  "otpResendIn": "يمكنك إعادة الإرسال بعد {time}",
+  "@otpResendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "otpResend": "إعادة إرسال الرمز",
+  "otpResent": "تم إرسال رمز جديد",
+  "otpChangeChannel": "تغيير طريقة الاستلام",
+  "forgotKicker": "استعادة الحساب",
+  "forgotTitle": "نسيت كلمة المرور؟",
+  "forgotSubtitle": "اختر كيف نتحقق من هويتك لإعادة تعيين كلمة المرور.",
+  "resetKicker": "كلمة مرور جديدة",
+  "resetTitle": "عيّن كلمة مرور جديدة",
+  "resetSubtitle": "اختر كلمة مرور قوية لا تستخدمها في مكان آخر.",
+  "newPassword": "كلمة المرور الجديدة",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "errPasswordMismatch": "كلمتا المرور غير متطابقتين",
+  "resetSave": "حفظ كلمة المرور",
+  "resetDone": "تم تغيير كلمة المرور. سجّل الدخول بها.",
+  "signInUnavailableTitle": "تسجيل الدخول غير متاح",
+  "signInUnavailableMessage": "لم تفعّل شركتك أي طريقة للدخول بعد. تواصل مع الموارد البشرية.",
+  "attendanceTitle": "الحضور والانصراف",
+  "attendanceTileNotYet": "لم تسجّل حضورك اليوم",
+  "attendanceTileIn": "حضرت الساعة {time}",
+  "@attendanceTileIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "attendanceTileDone": "اكتمل يوم اليوم",
+  "leaveTileBalance": "رصيدك {days} يومًا",
+  "@leaveTileBalance": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "servicesTitle": "الخدمات",
+  "shiftToday": "دوام اليوم {start} – {end}",
+  "@shiftToday": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "checkedInAtTime": "حضرت الساعة {time}",
+  "@checkedInAtTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "checkedOutAtTime": "انصرفت الساعة {time}",
+  "@checkedOutAtTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dayComplete": "تم تسجيل حضورك وانصرافك اليوم",
+  "workedLabel": "ساعات العمل",
+  "checkOut": "تسجيل انصراف",
+  "verifyMethodTitle": "طريقة التحقق",
+  "methodBiometric": "بصمة + موقع + صورة",
+  "methodQr": "بصمة + QR",
+  "stepsTitle": "خطوات التحقق",
+  "stepLocation": "تأكيد الموقع",
+  "stepLocationSub": "يجب أن تكون داخل نطاق الفرع",
+  "stepCamera": "صورة شخصية",
+  "stepCameraSub": "التقط صورة لوجهك",
+  "stepQr": "مسح رمز QR",
+  "stepQrSub": "امسح رمز الفرع",
+  "stepFingerprint": "البصمة",
+  "stepFingerprintSub": "المس مستشعر البصمة",
+  "permNote": "سيطلب التطبيق إذن الموقع والكاميرا عند أول استخدام.",
+  "todayLog": "سجل اليوم",
+  "logCheckIn": "الحضور",
+  "logCheckOut": "الانصراف",
+  "monthSummary": "هذا الشهر",
+  "statPresent": "حضور",
+  "statLate": "تأخير",
+  "statAbsent": "غياب",
+  "recentRecords": "آخر السجلات",
+  "statusPresent": "حاضر",
+  "statusLate": "متأخر",
+  "statusAbsent": "غائب",
+  "statusOnLeave": "إجازة",
+  "verifyTitleIn": "تسجيل الحضور",
+  "verifyTitleOut": "تسجيل الانصراف",
+  "verifyStepOf": "الخطوة {n} من {total}",
+  "@verifyStepOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "locSearching": "جارٍ تحديد موقعك...",
+  "locFound": "أنت داخل نطاق الفرع",
+  "locDistance": "تبعد {meters} م عن موقع الفرع",
+  "@locDistance": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "camHint": "ضع وجهك داخل الإطار",
+  "camCapture": "التقاط صورة",
+  "camRetake": "إعادة الالتقاط",
+  "camCaptured": "تم التقاط الصورة",
+  "qrHint": "وجّه الكاميرا نحو رمز QR الخاص بالفرع",
+  "qrScanning": "جارٍ المسح...",
+  "qrFound": "تم التعرف على رمز الفرع",
+  "fpHint": "المس مستشعر البصمة للتحقق من هويتك",
+  "fpVerify": "التحقق بالبصمة",
+  "fpVerifying": "جارٍ التحقق...",
+  "fpDone": "تم التحقق من هويتك",
+  "doneCheckedIn": "تم تسجيل حضورك",
+  "doneCheckedOut": "تم تسجيل انصرافك",
+  "doneBranch": "الفرع",
+  "doneTime": "الوقت",
+  "doneButton": "تم",
+  "leaveTitle": "الإجازات",
+  "leaveSubtitle": "رصيدك وطلباتك",
+  "leaveSick": "إجازة مرضية",
+  "leaveEmergency": "إجازة عارضة",
+  "leaveUnpaid": "إجازة بدون راتب",
+  "leaveBalanceLeft": "{days} يومًا متبقية",
+  "@leaveBalanceLeft": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveOfTotal": "من أصل {total} يومًا",
+  "@leaveOfTotal": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveNoLimit": "بدون حد",
+  "daysCount": "{count} يوم",
+  "@daysCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveNewRequest": "طلب إجازة جديدة",
+  "leaveMyRequests": "طلباتي",
+  "filterAll": "الكل",
+  "statusPending": "قيد المراجعة",
+  "statusApproved": "معتمد",
+  "statusRejected": "مرفوض",
+  "leaveEmptyTitle": "لا توجد طلبات",
+  "leaveEmptyMessage": "لا توجد طلبات بهذه الحالة.",
+  "showAll": "عرض الكل",
+  "detailType": "النوع",
+  "detailFrom": "من",
+  "detailTo": "إلى",
+  "detailDays": "المدة",
+  "detailReason": "السبب",
+  "detailStatus": "الحالة",
+  "detailSubmitted": "تاريخ الطلب",
+  "noReason": "لم يُذكر سبب",
+  "cancelRequest": "إلغاء الطلب",
+  "cancelRequestTitle": "إلغاء الطلب؟",
+  "cancelRequestMessage": "لن يصل الطلب إلى مديرك.",
+  "keepRequest": "الاحتفاظ بالطلب",
+  "requestCancelled": "تم إلغاء الطلب",
+  "leaveFormTitle": "طلب إجازة جديد",
+  "leaveFormSubtitle": "يصل طلبك إلى مديرك المباشر.",
+  "leaveBalanceInfo": "رصيدك المتاح من الإجازة السنوية {days} يومًا.",
+  "@leaveBalanceInfo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveType": "نوع الإجازة",
+  "leaveTypeHint": "اختر نوع الإجازة",
+  "dateFrom": "من تاريخ",
+  "dateTo": "إلى تاريخ",
+  "dateHint": "اختر التاريخ",
+  "leaveDurationLabel": "المدة",
+  "leaveReason": "السبب",
+  "leaveReasonHint": "اكتب سبب الإجازة (اختياري)",
+  "attachDocument": "إرفاق مستند",
+  "removeAttachment": "إزالة المرفق",
+  "leaveSubmit": "إرسال الطلب",
+  "leaveSubmitted": "تم إرسال طلبك إلى المدير",
+  "errLeaveType": "اختر نوع الإجازة",
+  "errDateFrom": "اختر تاريخ البداية",
+  "errDateTo": "اختر تاريخ النهاية",
+  "errDateOrder": "تاريخ النهاية قبل تاريخ البداية",
+  "errBalance": "رصيدك لا يكفي. المتاح {days} يومًا.",
+  "@errBalance": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "sampleManager": "أحمد المنصوري",
+  "tileLetters": "الخطابات",
+  "tileDocuments": "المستندات",
+  "tileNotifications": "الإشعارات",
+  "tileSecurity": "الأمان",
+  "signInFailedTitle": "تعذّر تسجيل الدخول",
+  "otpSendFailed": "تعذّر إرسال الرمز",
+  "otpTestCode": "الرمز التجريبي: {code}",
+  "otpTestCodeNote": "وضع تجريبي: لا يتم إرسال أي رسالة حاليًا، لذلك يظهر الرمز هنا.",
+  "@otpTestCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "profileGroupWork": "العمل",
+  "profileGroupContact": "التواصل",
+  "profileJob": "الوظيفة",
+  "profileDepartment": "القسم",
+  "profileSite": "موقع العمل",
+  "profileManager": "المدير المباشر",
+  "profileStatus": "حالة العمل",
+  "profileHireDate": "تاريخ التعيين",
+  "profileCompany": "الشركة",
+  "profileBranch": "الفرع",
+  "profileCategory": "الفئة",
+  "leaveHubSubtitle": "اختر ما تريد",
+  "leaveMyLeaves": "إجازاتي",
+  "leaveMyBalances": "أرصدتي",
+  "leaveRequestTile": "طلب إجازة",
+  "statusOpen": "قيد المعالجة",
+  "statusCancelled": "ملغاة",
+  "leaveShowMore": "عرض المزيد",
+  "leaveDaysValue": "{days} يوم",
+  "leaveCountTotal": "{count} طلب",
+  "balTitle": "أرصدتي",
+  "balSubtitle": "المتبقي من كل نوع إجازة",
+  "balRemaining": "المتبقي",
+  "balUsed": "المستخدم",
+  "balEntitlement": "الاستحقاق",
+  "balCarried": "المرحّل",
+  "balTotalAvailable": "إجمالي المتاح",
+  "balSickPrevious": "السابق",
+  "balSickCurrent": "هذا العام",
+  "balSickChronic": "المزمنة",
+  "balInjury": "إصابة عمل",
+  "balDeduction": "بدون مرتب (خصم)",
+  "balAbsence": "غياب",
+  "balOtherTitle": "أخرى",
+  "balYearLabel": "السنة",
+  "balNoneTitle": "لا يوجد رصيد مسجّل",
+  "balNoneMessage": "لا يوجد رصيد إجازات لهذه السنة بعد.",
+  "leaveApprovalSteps": "مراحل الاعتماد",
+  "stepApproved": "تمت الموافقة",
+  "stepPending": "في الانتظار",
+  "stepRejected": "مرفوض",
+  "detailWaitingAt": "في انتظار",
+  "detailStatusReason": "سبب الحالة",
+  "detailSubstitute": "الموظف البديل",
+  "leaveListSubtitle": "كل طلبات إجازاتك",
+  "detailWorkingDays": "أيام العمل",
+  "detailWeekend": "أيام الإجازة الأسبوعية",
+  "detailHolidays": "العطلات الرسمية",
+  "@leaveDaysValue": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "@leaveCountTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balDaysLeft": "يومًا متبقيًا",
+  "attTileCheckIn": "التحضير",
+  "attTileMonth": "ملخص الشهر",
+  "attTileAbsence": "الغياب",
+  "attendanceHubSubtitle": "اختر ما تريد",
+  "attHowTitle": "طريقة التحضير",
+  "attModeFaceLocation": "التحقق من الوجه",
+  "attModeFace": "التحقق من الوجه",
+  "attModeLocation": "الموقع",
+  "attHowFaceLocation": "تحقق سريع من وجهك بالكاميرا. وموقعك بيتأكد تلقائيًا في الخلفية.",
+  "attHowFace": "تحقق سريع من وجهك بالكاميرا.",
+  "attHowLocation": "كن داخل منطقة عملك، ثم أكّد من الخريطة.",
+  "permTitle": "قبل ما نبدأ",
+  "permMessage": "عشان تسجّل حضورك التطبيق محتاج إذنك. بيتستخدم فقط وقت التحضير.",
+  "permLocationTitle": "الموقع",
+  "permLocationMsg": "للتأكد إنك في مكان عملك.",
+  "permCameraTitle": "الكاميرا",
+  "permCameraMsg": "للتأكد بشكل مباشر إنك أنت.",
+  "permAllow": "سماح ومتابعة",
+  "blkLocationOffTitle": "خدمة الموقع مقفولة",
+  "blkLocationOffMsg": "شغّل الموقع (GPS) من إعدادات الهاتف، ثم ارجع.",
+  "blkLocationOffAction": "فتح إعدادات الموقع",
+  "blkPermissionTitle": "محتاجين إذن الموقع",
+  "blkPermissionMsg": "اسمح لـ LockSys HR باستخدام موقعك من إعدادات التطبيق، ثم ارجع.",
+  "blkPermissionAction": "فتح إعدادات التطبيق",
+  "blkMockTitle": "تم اكتشاف موقع وهمي",
+  "blkMockMsg": "اقفل أي تطبيق بيغيّر موقعك، ثم حاول مرة أخرى.",
+  "blkMockAction": "حاول مرة أخرى",
+  "blkVpnTitle": "اقفل الـ VPN",
+  "blkVpnMsg": "الـ VPN أو البروكسي بيخفي موقعك الحقيقي. اقفله ثم ارجع.",
+  "blkVpnAction": "فتح إعدادات الشبكة",
+  "blkDevTitle": "خيارات المطوّر مفتوحة",
+  "blkDevMsg": "اقفل خيارات المطوّر من إعدادات الهاتف، ثم ارجع.",
+  "blkDevAction": "فتح إعدادات المطوّر",
+  "blkRetry": "حاول مرة أخرى",
+  "faceStepOf": "الخطوة {n} من {total}",
+  "faceGetReady": "ضع وجهك داخل الشكل البيضاوي وانظر للأمام",
+  "faceRight": "لف رأسك لليمين",
+  "faceLeft": "لف رأسك لليسار",
+  "faceUp": "انظر لأعلى",
+  "faceDown": "انظر لأسفل",
+  "faceHold": "ثبّت وجهك",
+  "faceVerified": "تم التحقق، أنت صاحب الحساب",
+  "faceConfirmingLocation": "جارٍ تأكيد موقعك...",
+  "faceLiveNote": "تحقق مباشر. الصورة أو الشاشة لن تنفع.",
+  "mapLocating": "جارٍ تحديد موقعك...",
+  "mapInside": "أنت داخل {place}",
+  "mapOutside": "أنت خارج منطقة العمل",
+  "mapDistance": "على بعد حوالي {m} متر",
+  "mapRefresh": "تحديث موقعي",
+  "mapPlace": "منطقة عملك",
+  "attSamplePlace": "المصنع",
+  "doneMode": "تم التحقق بـ",
+  "doneModeFaceLocation": "التحقق من الوجه والموقع",
+  "doneModeFace": "التحقق من الوجه",
+  "doneModeLocation": "الموقع",
+  "@faceStepOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@mapInside": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "@mapDistance": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "attSitesTitle": "مواقعك",
+  "attLeftBadge": "منصرف",
+  "attNotEnabledTitle": "التحضير من التطبيق غير مفعّل",
+  "attNotEnabledMsg": "اطلب من الموارد البشرية تفعيل التحضير من التطبيق لك.",
+  "attNoSitesTitle": "لا يوجد موقع مخصص",
+  "attNoSitesMsg": "ليس لك موقع عمل بعد. تواصل مع الموارد البشرية.",
+  "attInTime": "وقت الحضور",
+  "attOutTime": "وقت الانصراف",
+  "attAreasTitle": "مناطق العمل",
+  "faceNoFace": "مش شايف وجهك. ادخل داخل الشكل البيضاوي",
+  "faceMultiple": "لازم تكون أنت بس قدّام الكاميرا",
+  "faceTooFar": "قرّب شوية",
+  "faceTooClose": "ابعد شوية",
+  "faceLookStraight": "انظر للكاميرا مباشرة",
+  "faceCameraDeniedTitle": "محتاجين إذن الكاميرا",
+  "faceCameraDeniedMsg": "اسمح لـ LockSys HR باستخدام الكاميرا من إعدادات التطبيق، ثم حاول مرة أخرى.",
+  "faceCameraFailedTitle": "تعذّر تشغيل الكاميرا",
+  "faceCameraFailedMsg": "اقفل أي تطبيق بيستخدم الكاميرا، ثم حاول مرة أخرى.",
+  "faceFailedTitle": "تعذّر التحقق إنك أنت",
+  "faceFailedMsg": "انظر للكاميرا واتبع الحركات، ثم حاول مرة أخرى.",
+  "monthPresent": "حضور",
+  "monthAbsent": "غياب",
+  "monthOff": "إجازات وراحات",
+  "monthHours": "ساعات",
+  "monthPrev": "الشهر السابق",
+  "monthNext": "الشهر التالي",
+  "legPresent": "حاضر",
+  "legAbsent": "غائب",
+  "legOff": "إجازة أو عطلة أو راحة",
+  "legMission": "مأمورية",
+  "legStar": "حضرت في يوم راحة",
+  "dayPresent": "حاضر",
+  "dayAbsent": "غائب",
+  "dayLeave": "في إجازة",
+  "dayMission": "في مأمورية",
+  "dayWeeklyOff": "راحة أسبوعية",
+  "dayHoliday": "عطلة رسمية",
+  "dayComp": "راحة مستحقة",
+  "dayPartTimeOff": "راحة نصف وقت",
+  "dayFuture": "يوم قادم",
+  "dayToday": "اليوم، لم تحضر بعد",
+  "dayNoCheckout": "لم يُسجّل انصراف",
+  "dayWorkedOnOff": "حضرت في يوم راحة",
+  "dayAbsenceLogged": "غياب مسجّل",
+  "monthUnavailableTitle": "غير متاح بعد",
+  "mapContinue": "متابعة",
+  "monthLeave": "إجازة",
+  "monthHoliday": "عطلة",
+  "monthRest": "راحة",
+  "legLeave": "إجازة",
+  "legHoliday": "عطلة رسمية",
+  "legRest": "راحة",
+  "leaveRequestNew": "طلب إجازة",
+  "leaveHalfDay": "نصف يوم",
+  "leaveHalfFirst": "النصف الأول",
+  "leaveHalfSecond": "النصف الثاني",
+  "leaveFullDay": "يوم كامل",
+  "leaveReasonRequiredHint": "اكتب سبب الإجازة",
+  "errReasonRequired": "سبب الإجازة مطلوب",
+  "leaveSumDays": "أيام الإجازة",
+  "leaveSumWeekend": "راحة",
+  "leaveSumHolidays": "عطلات رسمية",
+  "leaveSumDeducted": "تُخصم من الرصيد",
+  "leaveSumReturn": "العودة للعمل",
+  "leaveSumBalanceAfter": "المتبقي بعد الطلب",
+  "leaveTypesError": "تعذر تحميل أنواع الإجازات",
+  "leaveDaysValue": "{n} يوم",
+  "@leaveDaysValue": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "approvalsTitle": "الاعتمادات",
+  "apprTabWaiting": "بانتظار قراري",
+  "apprTabLater": "لاحقًا",
+  "apprTabDone": "تمت",
+  "apprEmptyWaitingTitle": "لا طلبات بانتظارك",
+  "apprEmptyWaitingMsg": "ستظهر هنا الطلبات التي جاء دورك في اعتمادها.",
+  "apprEmptyLaterTitle": "لا شيء قادم",
+  "apprEmptyLaterMsg": "الطلبات التي تنتظر قرار مرحلة قبلك تظهر هنا.",
+  "apprEmptyDoneTitle": "لا قرارات بعد",
+  "apprEmptyDoneMsg": "الطلبات التي وافقت عليها أو رفضتها تظهر هنا.",
+  "apprRequester": "مقدّم الطلب",
+  "apprDetailTitle": "تفاصيل الطلب",
+  "apprYourStage": "مرحلتك",
+  "apprWaitingFirst": "بانتظار {name} أولًا",
+  "apprNotYet": "ليس دورك بعد. يجب أن تُقرّر المرحلة السابقة أولًا.",
+  "apprApprove": "موافقة",
+  "apprReject": "رفض",
+  "apprApproveTitle": "الموافقة على الطلب",
+  "apprRejectTitle": "رفض الطلب",
+  "apprNotesHint": "ملاحظات (اختياري)",
+  "apprRejectHint": "اكتب سبب الرفض",
+  "apprRejectRequired": "سبب الرفض مطلوب",
+  "apprConfirm": "تأكيد",
+  "apprApproved": "تمت الموافقة على الطلب",
+  "apprRejected": "تم رفض الطلب",
+  "apprYourDecision": "قرارك",
+  "apprNotes": "ملاحظات",
+  "@apprWaitingFirst": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "apprHomeTitle": "بانتظار قرارك",
+  "apprShowAll": "عرض الكل ({n})",
+  "@apprShowAll": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "apprInfo": "بيانات الطلب",
+  "apprYouLabel": "أنت",
+  "apprConfirmApproveMsg": "هل تريد الموافقة على طلب {name}؟",
+  "@apprConfirmApproveMsg": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "promoNew": "جديد",
+  "promoTitle": "LockSys HR. موارد بشرية أذكى.",
+  "promoBody": "حضورك وإجازاتك واعتماداتك في مكان واحد.",
+  "promoButton": "اكتشف المزيد"
 }

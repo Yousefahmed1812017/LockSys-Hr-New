@@ -50,6 +50,19 @@ AppTextField(label: 'رقم الهوية', required: true, mono: true, keyboardT
 - الاختيار من قائمة: افتح `showAppBottomSheet` بدل Dropdown.
 - Checkbox / Switch: من الثيم (`Checkbox`, `Switch`) بدون تخصيص.
 
+## المربع الصغير — `AppSquareTile`
+```dart
+AppSquareTile(icon: AppIcons.clock, label: 'الحضور والانصراف', onTap: open)
+AppSquareTile(icon: AppIcons.calendar, label: 'الإجازات', badge: 2, onTap: open)
+```
+نفس مربع الأيقونة بتاع شاشة حسابي (`AppIconTile`: أزرق فاتح وأيقونة زرقاء)، والاسم القصير (سطرين كحد أقصى) **بره المربع تحته** بلون الكحلي (سطرين كحد أقصى)، شكل launcher. ثلاثة في الصف (`Row` + `Expanded`) في شاشة الرئيسية. `badge` عدّاد صغير أعلى النهاية ويختفي عند الصفر. `AppBadge` ينكمش بنقط (`…`) بدل ما يضغط العنوان لو المساحة ضيقة.
+
+## رمز التحقق — `AppOtpField`
+```dart
+AppOtpField(controller: code, errorText: errorOrNull, onCompleted: (code) => verify())
+```
+6 خانات مربعة (حواف 8، ارتفاع 56) دائمًا LTR. حقل واحد مخفي يستقبل الأرقام (كتابة أو لصق أو اقتراح SMS من الكيبورد). الخانة الحالية بحد أزرق، والخطأ بحد أحمر ونص تحت الخانات. `onCompleted` يُنادى مرة واحدة عند اكتمال الرقم الأخير. `length` افتراضيًا 6.
+
 ## القوائم — `AppListGroup` / `AppListTile` / `AppGroupTitle`
 ```dart
 AppGroupTitle('الحساب'),
@@ -76,17 +89,27 @@ AppSnackbar.show(context, 'فشل الحفظ', tone: AppTone.danger, actionLabel
 ```
 Dialog للتأكيد الخطير فقط (حذف، إلغاء، خروج).
 
-## هيكل الشاشة — `AppScreen` / `AppTopBar` / `AppPageHeader` / `AppBackButton` / `AppReveal`
+## هيكل الشاشة — `AppScreen` / `AppTopBar` / `AppScreenIntro` / `AppBackButton` / `AppReveal`
+
+اسم الشاشة **في الـ Top bar بالنص جنب زر الرجوع** (مش عنوان كبير تحته):
+
 ```dart
 AppScreen(
-  title: 'طلب إجازة', showBack: true,
-  kicker: 'الإجازات', heading: 'طلب إجازة جديد', subtitle: 'يصل طلبك للمدير المباشر.',
-  children: [ ... ],            // مسافة 16 بينها، وظهور متتابع تلقائي
-  onRefresh: reload,            // اختياري: سحب للتحديث
-  bottomBar: AppBottomNav(...), // للشاشات الرئيسية بالتابات
+  showBack: true,
+  heading: 'طلب إجازة جديد',        // يظهر في نص الـ Top bar
+  subtitle: 'يصل طلبك للمدير المباشر.', // سطر صغير تحت الـ Top bar (اختياري)
+  children: [ ... ],
+)
+// أو يدويًا:
+Scaffold(
+  appBar: AppTopBar(showBack: true, title: 'أرصدتي'),   // [رجوع]  أرصدتي (في النص)  [مربع فاضي بعرض الرجوع]
+  body: ListView(children: [AppScreenIntro('المتبقي من كل نوع'), ...]),
 )
 ```
-لجسم مخصص (قائمة طويلة، تابات) استخدم `body:` بدل `children:`، وضع `AppPageHeader` بنفسك في أعلاه.
+
+- مع `showBack` + `title` العنوان بيتوسّط تلقائيًا (الـ actions لو موجودة بتحل محل المربع الفاضي).
+- ممنوع Kicker وH1 كبير وخط أزرق تحت الـ Top bar (`AppPageHeader` قديمة ومش مستخدمة).
+- لجسم مخصص (قائمة طويلة، تابات) استخدم `body:` بدل `children:`.
 
 ## التحميل والحالات
 ```dart

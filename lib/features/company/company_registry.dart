@@ -20,29 +20,53 @@ abstract interface class CompanyRegistry {
   Future<Company> resolve(String code);
 }
 
-/// Development registry with two fake companies. Replace with the real one.
-///   LOCKSYS -> attendance + leave + payslip
-///   DEMO    -> attendance + leave
+/// Development registry with fake companies. Replace with the real one.
+///   LOCKSYS -> attendance + leave + payslip, Arabic + English
+///   DEMO    -> attendance + leave, English only
+///   ALNOOR  -> attendance, Arabic only
 class MockCompanyRegistry implements CompanyRegistry {
   const MockCompanyRegistry({this.delay = const Duration(milliseconds: 900)});
   final Duration delay;
 
   static const _companies = {
+    'ALNOOR': Company(
+      code: 'ALNOOR',
+      name: 'Al Noor Trading',
+      arabicName: 'شركة النور للتجارة',
+      apiBaseUrl: 'https://alnoor.example.com',
+      features: {AppFeature.attendance},
+      multiLanguage: false,
+      defaultLanguage: 'ar',
+    ),
     'LOCKSYS': Company(
       code: 'LOCKSYS',
       name: 'LockSys Solutions',
+      arabicName: 'لوك سيس للحلول',
       apiBaseUrl: 'https://api.locksys.co',
       features: {
         AppFeature.attendance,
         AppFeature.leave,
         AppFeature.payslip,
+        AppFeature.auth,
+        AppFeature.authPassword,
+        AppFeature.authPhone,
+        AppFeature.authPhoneViaSms,
+        AppFeature.authPhoneViaWhatsapp,
       },
     ),
     'DEMO': Company(
       code: 'DEMO',
       name: 'Demo Company',
+      arabicName: 'الشركة التجريبية',
       apiBaseUrl: 'https://demo.example.com',
-      features: {AppFeature.attendance, AppFeature.leave},
+      features: {
+        AppFeature.attendance,
+        AppFeature.leave,
+        AppFeature.auth,
+        AppFeature.authPassword,
+      },
+      multiLanguage: false,
+      defaultLanguage: 'en',
     ),
   };
 

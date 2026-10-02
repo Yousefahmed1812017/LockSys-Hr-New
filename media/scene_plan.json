@@ -1,0 +1,15 @@
+{
+  "duration": 37.0,
+  "source": "C:/Users/STOCK/Downloads/LockSys_SMS_Reel.mp4",
+  "video": "1080x1920, 30 fps, H.264; preserve video stream",
+  "existing_audio": false,
+  "scenes": [
+    {"start": 0, "end": 3.8, "visual": "Manual communication question", "voice_start": 0.3, "voice_end_limit": 3.7},
+    {"start": 3.8, "end": 9, "visual": "LockSys logo and automatic SMS introduction", "voice_start": 4.1, "voice_end_limit": 10.9},
+    {"start": 9, "end": 18, "visual": "Salary, attendance, employee and supplier/customer notifications", "voice_start": 11.0, "voice_end_limit": 19.3},
+    {"start": 18, "end": 25, "visual": "System operation sends immediate mobile message without manual intervention", "voice_start": 19.6, "voice_end_limit": 24.8},
+    {"start": 25, "end": 26.2, "visual": "Result heading and first benefit", "voice_start": 25.0, "voice_end_limit": 26.1},
+    {"start": 26.2, "end": 31.2, "visual": "Faster communication, fewer errors, better experience", "voice_start": 26.25, "voice_end_limit": 32.4},
+    {"start": 31.2, "end": 37, "visual": "LockSys Solutions logo and closing tagline", "voice_start": 33.0, "voice_end_limit": 36.6}
+  ]
+}

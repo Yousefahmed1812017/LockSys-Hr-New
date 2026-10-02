@@ -37,6 +37,21 @@ abstract final class AppColors {
   static const danger = Color(0xFFC62828);
   static const dangerBg = Color(0xFFFDECEC);
   static const dangerPressed = Color(0xFFA61F1F);
+
+  // Calendar days (month summary): leave = warning, holiday and rest have their own.
+  static const holiday = Color(0xFF6B3FA0);
+  static const holidayBg = Color(0xFFF1EAFB);
+  static const rest = Color(0xFF0F766E);
+  static const restBg = Color(0xFFE3F5F3);
+
+  // Calendar days as solid fills with white numbers: every kind has a color of its own.
+  static const calPresent = Color(0xFF16A34A);
+  static const calAbsent = Color(0xFFE5484D);
+  static const calLeave = Color(0xFFF5A623);
+  static const calLeaveText = Color(0xFFC77700); // the same amber, dark enough to read as text
+  static const calHoliday = Color(0xFF8B5CF6);
+  static const calRest = Color(0xFF14B8A6);
+  static const calMission = Color(0xFF2F7BFF);
 }
 
 /// Semantic tone used by badges, alerts, icon tiles and empty states.

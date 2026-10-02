@@ -7,27 +7,44 @@ import '../../l10n/app_localizations.dart';
 /// Read it anywhere with [LocaleScope.of]; flip with [toggle] / [setLocale].
 class LocaleController extends ChangeNotifier {
   LocaleController(this._prefs, {Locale? initial})
-      : _locale = initial ?? _read(_prefs);
+    : _locale = initial ?? _read(_prefs);
 
   static const _key = 'app_locale';
   final SharedPreferences _prefs;
   Locale _locale;
 
-  Locale get locale => _locale;
-  bool get isArabic => _locale.languageCode == 'ar';
+  /// Set when the company allows a single language. It overrides the user's
+  /// choice without replacing it, so the choice is back if the lock is lifted.
+  Locale? _forced;
+
+  Locale get locale => _forced ?? _locale;
+  bool get isArabic => locale.languageCode == 'ar';
+
+  /// false when the company locks the app to one language: hide every language
+  /// switch.
+  bool get canSwitch => _forced == null;
 
   static Locale _read(SharedPreferences p) =>
       Locale(p.getString(_key) == 'en' ? 'en' : 'ar'); // Arabic by default
 
+  /// Locks the app to [languageCode] (`ar` / `en`), or lifts the lock with null.
+  void forceLanguage(String? languageCode) {
+    if (languageCode != null && languageCode != 'ar' && languageCode != 'en') {
+      languageCode = null;
+    }
+    if (languageCode == _forced?.languageCode) return;
+    _forced = languageCode == null ? null : Locale(languageCode);
+    notifyListeners();
+  }
+
   Future<void> setLocale(Locale locale) async {
-    if (locale.languageCode == _locale.languageCode) return;
+    if (!canSwitch || locale.languageCode == _locale.languageCode) return;
     _locale = Locale(locale.languageCode);
     notifyListeners();
     await _prefs.setString(_key, _locale.languageCode);
   }
 
-  Future<void> toggle() =>
-      setLocale(Locale(isArabic ? 'en' : 'ar'));
+  Future<void> toggle() => setLocale(Locale(isArabic ? 'en' : 'ar'));
 }
 
 /// Exposes the [LocaleController] to the whole tree.

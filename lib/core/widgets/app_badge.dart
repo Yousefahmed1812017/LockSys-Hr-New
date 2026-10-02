@@ -35,12 +35,17 @@ class AppBadge extends StatelessWidget {
               child: Container(width: 3, height: 12, color: fg),
             ),
             const SizedBox(width: 7),
-            Text(
-              label,
-              style: AppText.xs.copyWith(
-                color: fg,
-                fontWeight: FontWeight.w600,
-                height: 1.5,
+            // Flexible: in a tight row the label shortens instead of overflowing.
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.xs.copyWith(
+                  color: fg,
+                  fontWeight: FontWeight.w600,
+                  height: 1.5,
+                ),
               ),
             ),
           ],

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import 'app_language_toggle.dart';
-import 'app_logo_mark.dart';
+import 'app_logo_full.dart';
 import 'app_screen.dart';
 import 'l_pattern.dart';
 
 /// White hero used by the pre-login screens (company code, login): faded L
-/// pattern, language toggle, the LockSys mark, the name and a short line.
+/// pattern, language toggle, the full LockSys logo and a short line.
 class AppBrandHero extends StatelessWidget {
   const AppBrandHero({super.key, required this.subtitle});
   final String subtitle;
@@ -38,19 +38,10 @@ class AppBrandHero extends StatelessWidget {
                     child: AppLanguageToggle(),
                   ),
                   const SizedBox(height: 12),
-                  const AppReveal(index: 0, child: AppLogoMark(height: 104)),
-                  const SizedBox(height: 16),
+                  const AppReveal(index: 0, child: AppLogoFull(width: 240)),
+                  const SizedBox(height: 14),
                   AppReveal(
                     index: 1,
-                    child: Text(
-                      'LockSys HR',
-                      textDirection: TextDirection.ltr,
-                      style: AppText.h1.copyWith(fontSize: 28),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  AppReveal(
-                    index: 2,
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 300),
                       child: Text(

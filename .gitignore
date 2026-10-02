@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local API development configuration
+.local/
+env.json
+
+# Local credentials defaults (see lib/core/config/local_secrets.example.dart)
+lib/core/config/local_secrets.dart
+.media_tools/
